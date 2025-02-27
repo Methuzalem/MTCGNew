@@ -1,16 +1,18 @@
 package Application.MTCG;
 
 import Application.MTCG.controller.UserController;
+import Application.MTCG.controller.SessionController;
 import Application.MTCG.repositorys.UserRepo;
 import Application.MTCG.service.UserService;
-import Server.Application;
-import Server.http.Request;
-import Server.http.Response;
-import Server.http.Status;
 import Application.MTCG.controller.Controller;
 import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.exceptions.ControllerNotFound;
 import Application.MTCG.routing.Router;
+
+import Server.Application;
+import Server.http.Request;
+import Server.http.Response;
+import Server.http.Status;
 
 //import at.technikum.application.moodle.service.StudentService;
 //import at.technikum.application.moodle.repository.StudentDbRepository;
@@ -55,7 +57,7 @@ public class MTCG implements Application {
         UserService userService = new UserService(userRepo);
 
         this.router.addRoute("/users", new UserController(userService));
-        //this.router.addRoute("/sessions", new SessionController(userRepository));
+        this.router.addRoute("/sessions", new SessionController(userRepo));
 
 /*
         StudentRepository studentRepository = new StudentDbRepository(connectionPool);

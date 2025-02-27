@@ -30,7 +30,6 @@ public class UserController extends Controller {
 
     }
 
-
     private Response create(Request request) {
         try{
             User user = fromBody(request.getBody(), User.class);

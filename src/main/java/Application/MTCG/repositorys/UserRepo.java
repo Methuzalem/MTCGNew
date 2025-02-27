@@ -13,8 +13,9 @@ import java.util.List;
 
 
 public class UserRepo {
-    private final static String NEW_USER = "INSERT INTO users (uuid, username, password, credit, token) VALUES (?, ?, ?, ?, ?)";
+    private final static String NEW_USER = "INSERT INTO users (uuid, username, password, credit) VALUES (?, ?, ?, ?)";
     private final static String FIND_USER_BY_USERNAME = "SELECT * FROM users WHERE username = ?";
+    private final static String UPDATE_USER_BY_UUID = "UPDATE users SET username = ?, password = ?, bio = ?, image = ?, elo = ?, wins = ?, losses = ?, token = ?, credit = ? WHERE uuid = ?";
     private final static String FIND_ALL_USERS = "SELECT * FROM users";
     private final static String FIND_USER_BY_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final ConnectionPool connectionPool;
@@ -33,9 +34,8 @@ public class UserRepo {
             preparedStatement.setString(2, user.getUsername());
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setInt(4, 20);
-            user.setToken("%s-mtcgToken".formatted(user.getUsername()));
-            preparedStatement.setString(5, user.getToken());
             preparedStatement.execute();
+            user.setToken("%s-mtcgToken".formatted(user.getUsername()));
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,5 +59,27 @@ public class UserRepo {
         }
 
         return Optional.empty();
+    }
+
+    public void updateUserByUuid(User user){
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_UUID)
+        ) {
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getBio());
+            preparedStatement.setString(4, user.getImage());
+            preparedStatement.setInt(5, user.getElo());
+            preparedStatement.setInt(6, user.getWins());
+            preparedStatement.setInt(7, user.getLosses());
+            preparedStatement.setString(8, user.getToken());
+            preparedStatement.setInt(9, user.getCredit());
+            preparedStatement.setString(10, user.getUuid());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
