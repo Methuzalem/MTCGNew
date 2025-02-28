@@ -24,7 +24,12 @@ public enum CardName {
     RegularElf("RegularElf"),
     WaterSpell("WaterSpell"),
     FireSpell("FireSpell"),
-    RegularSpell("RegularSpell");
+    RegularSpell("RegularSpell"),
+    Dragon("Dragon"),
+    Ork("Ork"),
+    Knight("Knight"),
+    Kraken("Kraken"),
+    Wizzard("Wizzard");
 
     private final String name;
 

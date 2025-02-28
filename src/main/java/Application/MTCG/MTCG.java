@@ -1,8 +1,11 @@
 package Application.MTCG;
 
+import Application.MTCG.controller.PackageController;
 import Application.MTCG.controller.UserController;
 import Application.MTCG.controller.SessionController;
+import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.UserRepo;
+import Application.MTCG.service.CardService;
 import Application.MTCG.service.UserService;
 import Application.MTCG.controller.Controller;
 import Application.MTCG.data.ConnectionPool;
@@ -55,9 +58,12 @@ public class MTCG implements Application {
         ConnectionPool connectionPool = new ConnectionPool();
         UserRepo userRepo = new UserRepo(connectionPool);
         UserService userService = new UserService(userRepo);
+        CardRepo cardRepo = new CardRepo(connectionPool);
+        CardService cardService = new CardService(cardRepo, userService);
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
+        this.router.addRoute("/packages", new PackageController(cardService));
 
 /*
         StudentRepository studentRepository = new StudentDbRepository(connectionPool);

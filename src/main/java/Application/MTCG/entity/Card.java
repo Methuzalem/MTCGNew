@@ -11,13 +11,11 @@ public class Card {
     private String elementType;
     private float damage;
     private String ownerID;
-    private String deckUserId;
 
     public Card(@JsonProperty("Id") String id,
                 @JsonProperty("Name") String name,
                 @JsonProperty("Damage") float damage,
-                @JsonProperty("ownerUuid") String ownerUuid,
-                @JsonProperty("DeckUserId") String deckUserId) {
+                @JsonProperty("ownerUuid") String ownerUuid) {
         this.cardID = id;
         try {
             this.cardName = CardName.valueOf(name);
@@ -25,14 +23,13 @@ public class Card {
                 case FireGoblin, FireDragon, FireWizzard, FireOrk, FireKnight, FireKraken, FireElf, FireSpell -> this.elementType = "Fire";
                 case WaterGoblin, WaterDragon, WaterWizzard, WaterOrk, WaterKnight, WaterKraken, WaterElf, WaterSpell -> this.elementType = "Water";
                 case RegularGoblin, RegularDragon, RegularWizzard, RegularOrk, RegularKnight, RegularKraken, RegularElf, RegularSpell -> this.elementType = "Regular";
-                default -> elementType = "Unknown";
+                default -> this.elementType = "Unknown";
             }
         } catch (IllegalArgumentException e) {
             throw new InvalidCardName("Invalid card name: " + name);
         }
         this.damage = damage;
         this.ownerID = ownerUuid;
-        this.deckUserId = deckUserId;
     }
 
     public String getCardID() {
@@ -43,8 +40,8 @@ public class Card {
         this.cardID = cardID;
     }
 
-    public CardName getCardName() {
-        return cardName;
+    public String getCardName() {
+        return cardName.getName();
     }
 
     public void setCardName(CardName cardName) {
@@ -73,13 +70,5 @@ public class Card {
 
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
-    }
-
-    public String getDeckUserId() {
-        return deckUserId;
-    }
-
-    public void setDeckUserId(String deckUserId) {
-        this.deckUserId = deckUserId;
     }
 }

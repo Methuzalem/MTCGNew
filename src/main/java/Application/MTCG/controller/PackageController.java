@@ -32,7 +32,7 @@ public class PackageController extends Controller {
             String loginToken = getLoginToken(request);
             List<Card> cards = arrayFromBody(request.getBody(), new TypeReference<List<Card>>() {});
 
-           // cards = cardService.createPackage(loginToken, cards);
+            cards = cardService.createPackage(loginToken, cards);
 
             return json(Status.CREATED, cards);
         } catch (MissingLoginTokenException e){
