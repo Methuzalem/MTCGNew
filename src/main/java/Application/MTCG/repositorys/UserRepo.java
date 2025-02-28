@@ -15,7 +15,7 @@ import java.util.List;
 public class UserRepo {
     private final static String NEW_USER = "INSERT INTO users (uuid, username, password, credit) VALUES (?, ?, ?, ?)";
     private final static String FIND_USER_BY_USERNAME = "SELECT * FROM users WHERE username = ?";
-    private final static String UPDATE_USER_BY_UUID = "UPDATE users SET username = ?, password = ?, bio = ?, image = ?, elo = ?, wins = ?, losses = ?, token = ?, credit = ? WHERE uuid = ?";
+    private final static String UPDATE_USER_BY_UUID = "UPDATE users SET username = ?, password = ?, bio = ?, image = ?, elo = ?, wins = ?, losses = ?, token = ?, credit = ?, packagecount = ? WHERE uuid = ?";
     private final static String FIND_ALL_USERS = "SELECT * FROM users";
     private final static String FIND_USER_BY_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final ConnectionPool connectionPool;
@@ -75,7 +75,8 @@ public class UserRepo {
             preparedStatement.setInt(7, user.getLosses());
             preparedStatement.setString(8, user.getToken());
             preparedStatement.setInt(9, user.getCredit());
-            preparedStatement.setString(10, user.getUuid());
+            preparedStatement.setInt(10, user.getPackageCount());
+            preparedStatement.setString(11, user.getUuid());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

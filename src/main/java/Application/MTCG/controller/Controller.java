@@ -2,12 +2,15 @@ package Application.MTCG.controller;
 
 import Application.MTCG.exceptions.InvalidBodyException;
 import Application.MTCG.exceptions.JsonParserException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import Application.MTCG.exceptions.MissingLoginTokenException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import Server.http.Request;
 import Server.http.Response;
 import Server.http.Status;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class Controller {
 
@@ -38,7 +41,31 @@ public abstract class Controller {
         } catch (JsonProcessingException e) {
             throw new JsonParserException(e);
         }
-
         return response;
     }
+
+    protected String getLoginToken(Request request) {
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new MissingLoginTokenException("Login Token is missing");
+        } else {
+            String token = header.split(" ")[1];
+            String name = token.split("-")[0];
+
+            System.out.println("Login Name: " + name);
+
+            return token;
+        }
+    }
+
+    protected <T> T arrayFromBody(String body, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(body, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new InvalidBodyException(e);
+        }
+    }
+
+
+
 }
