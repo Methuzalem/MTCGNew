@@ -29,7 +29,7 @@ public class TransactionController extends Controller {
         if (request.getMethod().equals(Method.POST)) {
             return modelPackage(request);
         }
-        return json(Status.NOT_FOUND, "Endpoint not found");
+        return json(Status.NOT_FOUND, "Couldn't handle HTTP request.");
     }
 
     public Response modelPackage(Request request) {

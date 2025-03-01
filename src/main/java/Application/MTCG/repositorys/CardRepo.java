@@ -19,11 +19,13 @@ public class CardRepo {
     private final static String NEW_CARD = "INSERT INTO cards VALUES (?, ?, ?, ?, ?)";
     private final static String FIND_FREE_CARDS = "SELECT * FROM cards WHERE owner_uuid is NULL";
     private final static String UPDATE_CARD = "UPDATE cards SET owner_uuid = ? where id = ?";
+    private final static String FIND_CARDS_BY_USER_ID = "SELECT * from cards where owner_uuid = ?";
+
     private final static String ALL_CARDS = "SELECT * FROM cards";
     private final static String CARDS_BELONGING_TO_DECK = "SELECT * from cards where deck_owner_uuid = ?";
     private final static String CARDS_BELONGING_TO_USER = "SELECT * FROM cards WHERE owner_uuid = ?";
 
-    private final static String CARDS_BELONGING_TO_CARD_ID = "SELECT * from cards where id = ?";
+
 
 
     public CardRepo(ConnectionPool connectionPool) {
@@ -74,6 +76,25 @@ public class CardRepo {
             preparedStatement.setString(1, card.getOwnerID());
             preparedStatement.setString(2, card.getCardID());
             preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Card> findCardsbyUserId(User user){
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(FIND_CARDS_BY_USER_ID)
+        ) {
+            List<Card> cards = new ArrayList<>();
+            preparedStatement.setString(1, user.getUuid());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Card card = new Card(resultSet.getString("id"), resultSet.getString("name"), resultSet.getFloat("damage"), resultSet.getString("owner_uuid"), resultSet.getString("elementType"));
+                cards.add(card);
+            }
+            return cards;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

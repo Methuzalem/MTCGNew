@@ -2,11 +2,9 @@ package Application.MTCG.service;
 
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
-import Application.MTCG.repositorys.CardRepo;
-import Application.MTCG.exceptions.NotEnoughCards;
+import Application.MTCG.exceptions.*;
 import Application.MTCG.exceptions.NullPointerException;
-import Application.MTCG.exceptions.PermissionDenied;
-import Application.MTCG.exceptions.NotEnoughCoins;
+import Application.MTCG.repositorys.CardRepo;
 
 
 import java.util.List;
@@ -59,12 +57,29 @@ public class CardService {
                 cardRepo.updateOwner(cardsWithoutOwner.get(i));
                 packageCards.add(cardsWithoutOwner.get(i));
             }
-            user.setCoins(user.getCoins()-5);
-            user.setPackageCount(user.getPackageCount()+1);
+            if(user.getPackageCount() == 10){
+                user.setPackageCount(0);
+            } else {
+                user.setCoins(user.getCoins()-5);
+                user.setPackageCount(user.getPackageCount()+1);
+            }
             userService.updateUserByUuid(user);
             return packageCards;
+
         } else {
             throw(new NotEnoughCoins("Not enough coins left"));
+        }
+    }
+
+    public List<Card> readCardsOfUser(User user) {
+        try {
+            List<Card> cards = cardRepo.findCardsbyUserId(user);
+            if(cards == null || cards.isEmpty()){
+                throw new NoCardsFound("No cards found for this user");
+            }
+            return cards;
+        } catch (NoCardsFound e) {
+            throw(new NoCardsFound("No cards found for this user"));
         }
     }
 }

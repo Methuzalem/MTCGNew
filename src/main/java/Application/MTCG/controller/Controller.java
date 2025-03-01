@@ -48,11 +48,11 @@ public abstract class Controller {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
             throw new MissingLoginTokenException("Login Token is missing");
-        } else {
+        }
             String token = header.split(" ")[1];
             String name = token.split("-")[0];
             return token;
-        }
+
     }
 
     protected <T> T arrayFromBody(String body, TypeReference<T> typeReference) {
