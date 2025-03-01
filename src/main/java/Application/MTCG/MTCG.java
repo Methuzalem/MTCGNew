@@ -4,6 +4,7 @@ import Application.MTCG.controller.*;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.UserRepo;
 import Application.MTCG.service.CardService;
+import Application.MTCG.service.DeckService;
 import Application.MTCG.service.UserService;
 import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.exceptions.ControllerNotFound;
@@ -13,10 +14,6 @@ import Server.Application;
 import Server.http.Request;
 import Server.http.Response;
 import Server.http.Status;
-
-//import at.technikum.application.moodle.service.StudentService;
-//import at.technikum.application.moodle.repository.StudentDbRepository;
-//import at.technikum.application.moodle.repository.StudentRepository;
 
 public class MTCG implements Application {
 
@@ -57,12 +54,14 @@ public class MTCG implements Application {
         UserService userService = new UserService(userRepo);
         CardRepo cardRepo = new CardRepo(connectionPool);
         CardService cardService = new CardService(cardRepo, userService);
+        DeckService deckService = new DeckService(cardRepo, userService);
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
         this.router.addRoute("/packages", new PackageController(cardService));
         this.router.addRoute("/transactions/packages", new TransactionController(cardService, userService));
         this.router.addRoute("/cards", new CardController(cardService, userService));
+        this.router.addRoute("/deck", new DeckController(deckService));
 
 
 /*

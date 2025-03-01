@@ -11,12 +11,14 @@ public class Card {
     private float damage;
     private String ownerID;
     private String elementType;
+    private String deckId;
 
     public Card(@JsonProperty("Id") String id,
                 @JsonProperty("Name") String name,
+                @JsonProperty("elementType") String elementType,
                 @JsonProperty("Damage") float damage,
                 @JsonProperty("ownerUuid") String ownerUuid,
-                @JsonProperty("elementType") String elementType){
+                @JsonProperty("deckId") String deckId) {
         this.cardID = id;
         this.elementType = elementType;
         try {
@@ -32,6 +34,7 @@ public class Card {
         }
         this.damage = damage;
         this.ownerID = ownerUuid;
+        this.deckId = deckId;
     }
 
     public String getCardID() {
@@ -73,4 +76,8 @@ public class Card {
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
     }
+
+    public String getDeckId() { return deckId; }
+
+    public void setDeckId(String deckId) { this.deckId = deckId; }
 }
