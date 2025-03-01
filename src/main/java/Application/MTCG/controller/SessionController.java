@@ -32,7 +32,7 @@ public class SessionController extends Controller {
     private Response authenticate(Request request) {
         try {
             TokenAuthenticator authenticator = fromBody(request.getBody(), TokenAuthenticator.class);
-            CreateTokenDTO newToken = tokenService.createToken(authenticator);
+            CreateTokenDTO newToken = tokenService.createTokenInitializeStats(authenticator);
             return json(Status.OK, newToken);
         } catch (InvalidUserData e) {
             return json(Status.CONFLICT, new HttpErrorResponse("The given User data is invalid"));

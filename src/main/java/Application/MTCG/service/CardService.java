@@ -2,14 +2,15 @@ package Application.MTCG.service;
 
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
+import Application.MTCG.repositorys.CardRepo;
+import Application.MTCG.exceptions.NotEnoughCards;
 import Application.MTCG.exceptions.NullPointerException;
 import Application.MTCG.exceptions.PermissionDenied;
-import Application.MTCG.service.UserService;
-import Application.MTCG.repositorys.CardRepo;
+import Application.MTCG.exceptions.NotEnoughCoins;
+
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class CardService {
     private final CardRepo cardRepo;
@@ -35,14 +36,35 @@ public class CardService {
     public Card createCard(Card card) {
         if (card == null) {
             throw new NullPointerException("Card object can't be null");
-        }
-
-        if (card.getCardName() == null) {
+        } else if (card.getCardName() == null) {
             throw new NullPointerException("Card name can't,od be null");
         }
-
         card = cardRepo.save(card);
-
         return card;
+    }
+
+    public List<Card> checkCoinsAquirePackage(String loginToken){
+        User user = userService.getUserByToken(loginToken);
+        final int packageCosts = 5;
+        final int amountOfCardsInPackage = 5;
+
+        if(user.getCoins() >= packageCosts){
+            List<Card> packageCards = new ArrayList<>();
+            List<Card> cardsWithoutOwner = cardRepo.findFreeCards(user);
+            if(cardsWithoutOwner == null || cardsWithoutOwner.size() < amountOfCardsInPackage){
+                throw new NotEnoughCards("Not enough Cards for package available");
+            }
+            for(int i = 0; i < amountOfCardsInPackage; i++){
+                cardsWithoutOwner.get(i).setOwnerID(user.getUuid());
+                cardRepo.updateOwner(cardsWithoutOwner.get(i));
+                packageCards.add(cardsWithoutOwner.get(i));
+            }
+            user.setCoins(user.getCoins()-5);
+            user.setPackageCount(user.getPackageCount()+1);
+            userService.updateUserByUuid(user);
+            return packageCards;
+        } else {
+            throw(new NotEnoughCoins("Not enough coins left"));
+        }
     }
 }

@@ -8,25 +8,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Card {
     private String cardID;
     private CardName cardName;
-    private String elementType;
     private float damage;
     private String ownerID;
+    private String elementType;
 
     public Card(@JsonProperty("Id") String id,
                 @JsonProperty("Name") String name,
                 @JsonProperty("Damage") float damage,
-                @JsonProperty("ownerUuid") String ownerUuid) {
+                @JsonProperty("ownerUuid") String ownerUuid,
+                @JsonProperty("elementType") String elementType){
         this.cardID = id;
+        this.elementType = elementType;
         try {
             this.cardName = CardName.valueOf(name);
-            switch (cardName) {
-                case FireGoblin, FireDragon, FireWizzard, FireOrk, FireKnight, FireKraken, FireElf, FireSpell -> this.elementType = "Fire";
-                case WaterGoblin, WaterDragon, WaterWizzard, WaterOrk, WaterKnight, WaterKraken, WaterElf, WaterSpell -> this.elementType = "Water";
-                case RegularGoblin, RegularDragon, RegularWizzard, RegularOrk, RegularKnight, RegularKraken, RegularElf, RegularSpell -> this.elementType = "Regular";
-                default -> this.elementType = "Unknown";
-            }
         } catch (IllegalArgumentException e) {
             throw new InvalidCardName("Invalid card name: " + name);
+        }
+        switch (cardName) {
+            case FireGoblin, FireDragon, FireWizzard, FireOrk, FireKnight, FireKraken, FireElf, FireSpell -> this.elementType = "Fire";
+            case WaterGoblin, WaterDragon, WaterWizzard, WaterOrk, WaterKnight, WaterKraken, WaterElf, WaterSpell -> this.elementType = "Water";
+            case RegularGoblin, RegularDragon, RegularWizzard, RegularOrk, RegularKnight, RegularKraken, RegularElf, RegularSpell -> this.elementType = "Regular";
+            default -> this.elementType = "Unknown";
         }
         this.damage = damage;
         this.ownerID = ownerUuid;

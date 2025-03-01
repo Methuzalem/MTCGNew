@@ -3,6 +3,7 @@ package Application.MTCG;
 import Application.MTCG.controller.PackageController;
 import Application.MTCG.controller.UserController;
 import Application.MTCG.controller.SessionController;
+import Application.MTCG.controller.TransactionController;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.UserRepo;
 import Application.MTCG.service.CardService;
@@ -64,6 +65,7 @@ public class MTCG implements Application {
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
         this.router.addRoute("/packages", new PackageController(cardService));
+        this.router.addRoute("/transactions/packages", new TransactionController(cardService, userService));
 
 /*
         StudentRepository studentRepository = new StudentDbRepository(connectionPool);

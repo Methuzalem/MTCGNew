@@ -1,20 +1,10 @@
 package Application.MTCG.dto;
 
 public class CreateTokenDTO {
-    private String username;
     private String token;
 
-    public CreateTokenDTO(String username, String token) {
-        this.username = username;
+    public CreateTokenDTO(String token) {
         this.token = token;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getToken() {

@@ -51,9 +51,6 @@ public abstract class Controller {
         } else {
             String token = header.split(" ")[1];
             String name = token.split("-")[0];
-
-            System.out.println("Login Name: " + name);
-
             return token;
         }
     }

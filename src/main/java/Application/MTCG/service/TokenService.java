@@ -15,17 +15,19 @@ public class TokenService {
         this.userRepo = userRepo;
     }
 
-    public CreateTokenDTO createToken(TokenAuthenticator tokenAuthenticator) {
-        Optional<User> userOptional = this.userRepo.findUserByName(tokenAuthenticator.getUsername());
+    public CreateTokenDTO createTokenInitializeStats(TokenAuthenticator tokenAuthenticator) {
+        Optional<User> existingUser = this.userRepo.findUserByName(tokenAuthenticator.getUsername());
 
-        if (userOptional.isPresent() && userOptional.get().getPassword().equals(tokenAuthenticator.getPassword())) {
+        if (existingUser.isPresent() && existingUser.get().getPassword().equals(tokenAuthenticator.getPassword())) {
             String tokenName ="%s-mtcgToken".formatted(tokenAuthenticator.getUsername());
+            existingUser.get().setToken(tokenName);
+            existingUser.get().setCoins(20);
+            existingUser.get().setElo(100);
+            existingUser.get().setBio("Here comes your Bio");
+            existingUser.get().setImage("Here comes your Image");
             tokenAuthenticator.setToken(tokenName);
-            User user = userOptional.get();
-            user.setToken(tokenName);
-
-            this.userRepo.updateUserByUuid(user);
-            return new CreateTokenDTO(tokenAuthenticator.getUsername(), tokenAuthenticator.getToken());
+            this.userRepo.updateUserByUuid(existingUser.get());
+            return new CreateTokenDTO(tokenAuthenticator.getToken());
         } else {
             throw new InvalidUserData("Invalid User Data");
         }

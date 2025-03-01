@@ -4,36 +4,35 @@ public class User {
     private String uuid = "";
     private String username;
     private String password;
+    private String token;
+    private int coins;
+    private int packageCount = 0;
     private String bio = "";
+    private int elo;
     private String image = "";
-    private int elo = 100;
     private int wins = 0;
     private int losses = 0;
-    private String token;
-    private int credit;
-    private int packageCount = 0;
 
-    //Con1
+
     public User() {}
-    //Con2
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.credit = 20;
     }
-    //Con3
-    public User(String uuid, String username, String password, String bio, String image, int elo, int wins, int losses, String token, int credit) {
+
+    public User(String uuid, String username, String password, String token, int coins, int packageCount, String bio, String image, int elo, int wins, int losses) {
         this.uuid = uuid;
         this.username = username;
         this.password = password;
         this.token = token;
-
+        this.coins = coins;
+        this.packageCount = packageCount;
         this.bio = bio;
         this.image = image;
         this.elo = elo;
         this.wins = wins;
         this.losses = losses;
-        this.credit = credit;
     }
 
     public void setUuid(String uuid) {
@@ -96,12 +95,12 @@ public class User {
         this.losses = losses;
     }
 
-    public int getCredit() {
-        return credit;
+    public int getCoins() {
+        return coins;
     }
 
-    public void setCredit(int credit) {
-        this.credit = credit;
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
     public String getImage() {

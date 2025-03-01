@@ -11,7 +11,6 @@ import Server.http.Response;
 import Server.http.Method;
 import Server.http.Status;
 
-
 public class UserController extends Controller {
 
     private final UserService userService;
@@ -27,7 +26,6 @@ public class UserController extends Controller {
         } else {
             return json(Status.NOT_FOUND, "Couldn't handle HTTP request.");
         }
-
     }
 
     private Response create(Request request) {
@@ -41,6 +39,4 @@ public class UserController extends Controller {
             return json(Status.INTERNAL_SERVER_ERROR, new HttpErrorResponse(e.getMessage()));
         }
     }
-
-
 }
