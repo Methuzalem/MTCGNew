@@ -60,11 +60,10 @@ public class MTCG implements Application {
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
-        this.router.addRoute("/packages", new PackageController(cardService));
         this.router.addRoute("/transactions/packages", new TransactionController(cardService, userService));
+        this.router.addRoute("/packages", new PackageController(cardService));
         this.router.addRoute("/cards", new CardController(cardService, userService));
         this.router.addRoute("/deck", new DeckController(deckService));
-        this.router.addRoute("/deck?format=plain", new DeckController(deckService));
 
 
 

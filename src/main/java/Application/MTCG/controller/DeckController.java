@@ -38,7 +38,7 @@ public class DeckController extends Controller {
     private Response displayDeck(Request request) {
         try {
             String loginToken = getLoginToken(request);
-            List<Card> cardsToDisplay = deckService.displayDeckCardsOfUser(loginToken);
+            List<Card> cardsToDisplay = deckService.getDeckCardsOfUser(loginToken);
             return json(Status.OK, cardsToDisplay);
         } catch (InvalidUserData e) {
             return json(Status.NOT_FOUND, e);
@@ -68,7 +68,7 @@ public class DeckController extends Controller {
         try {
             String loginToken = getLoginToken(request);
             String plainText;
-            List<Card> cardsToDisplay = deckService.displayDeckCardsOfUser(loginToken);
+            List<Card> cardsToDisplay = deckService.getDeckCardsOfUser(loginToken);
             plainText = deckService.convertDeckToPlainText(cardsToDisplay);
             return text(Status.OK, plainText);
         } catch (InvalidUserData e) {

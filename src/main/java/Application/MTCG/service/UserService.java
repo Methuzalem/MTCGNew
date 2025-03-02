@@ -1,14 +1,18 @@
 package Application.MTCG.service;
 
+import Application.MTCG.dto.UpdateUserDTO;
 import Application.MTCG.entity.User;
 import Application.MTCG.dto.CreateUserDTO;
 import Application.MTCG.exceptions.InvalidUserData;
 import Application.MTCG.exceptions.UserAlreadyExisting;
 import Application.MTCG.repositorys.UserRepo;
 import Application.MTCG.exceptions.NullPointerException;
+import Server.http.Request;
 
 import java.util.Optional;
 import java.util.UUID;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UserService {
 
@@ -39,7 +43,6 @@ public class UserService {
         if (token == null) {
             throw new NullPointerException("Token can not be NULL");
         }
-
         Optional<User> findUser = userRepo.findUserByToken(token);
 
         if (findUser.isPresent()) {
@@ -51,5 +54,42 @@ public class UserService {
 
     public void updateUserByUuid (User user) {
         userRepo.updateUserByUuid(user);
+    }
+
+    public boolean matchTokenWithPath (String loginToken, String path) {
+        if (loginToken == null || path == null) {
+            throw new NullPointerException("Login token can not be NULL");
+        }
+
+        if (path.startsWith("/users/")) {
+            String username = path.substring(7);
+            return loginToken.startsWith(username);
+        }
+        return false;
+    }
+
+    public UpdateUserDTO modelUpdateDTO (User user) {
+        if (user == null) {
+            throw new NullPointerException("User can not be NULL");
+        }
+        return new UpdateUserDTO(user.getName(), user.getBio(), user.getImage());
+    }
+
+    public UpdateUserDTO modelUpdateDTOFromRequest (Request request) {
+        ObjectMapper objectMapper = new ObjectMapper(); // JSON-Parser
+        try {
+            return objectMapper.readValue(request.getBody(), UpdateUserDTO.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error with Request parsing", e);
+        }
+    }
+
+    public void updateUserNameBioImage(User user, UpdateUserDTO dto) {
+        user.setName(dto.getName());
+        user.setBio(dto.getBio());
+        user.setImage(dto.getImage());
+
+        updateUserByUuid(user);
     }
 }

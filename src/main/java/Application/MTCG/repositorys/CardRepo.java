@@ -104,7 +104,7 @@ public class CardRepo {
         }
     }
 
-    public List<Card> displayDeckUser(User user){
+    public List<Card> getDeckCardsByUser(User user){
         List<Card> cards = new ArrayList<>();
         try (
                 Connection connection = connectionPool.getConnection();

@@ -15,7 +15,7 @@ public class Router {
 
     public Controller getController(String path) {
         for (Route route: this.routes) {
-            if (!path.equals(route.getRoute())) {
+            if (!path.contains(route.getRoute())) {
                 continue;
             }
 

@@ -7,6 +7,7 @@ public class User {
     private String token;
     private int coins;
     private int packageCount = 0;
+    private String name;
     private String bio = "";
     private int elo;
     private String image = "";
@@ -21,13 +22,14 @@ public class User {
         this.password = password;
     }
 
-    public User(String uuid, String username, String password, String token, int coins, int packageCount, String bio, String image, int elo, int wins, int losses) {
+    public User(String uuid, String username, String password, String token, int coins, int packageCount, String name, String bio, String image, int elo, int wins, int losses) {
         this.uuid = uuid;
         this.username = username;
         this.password = password;
         this.token = token;
         this.coins = coins;
         this.packageCount = packageCount;
+        this.name = name;
         this.bio = bio;
         this.image = image;
         this.elo = elo;
@@ -67,8 +69,16 @@ public class User {
         this.token = token;
     }
 
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
     public String getBio() {
         return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public int getElo() {
@@ -105,10 +115,6 @@ public class User {
 
     public String getImage() {
         return image;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
     }
 
     public void setImage(String image) {

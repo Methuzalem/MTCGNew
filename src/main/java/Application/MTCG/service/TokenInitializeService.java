@@ -8,10 +8,10 @@ import Application.MTCG.entity.User;
 
 import java.util.Optional;
 
-public class TokenService {
+public class TokenInitializeService {
     private final UserRepo userRepo;
 
-    public TokenService(UserRepo userRepo) {
+    public TokenInitializeService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -23,8 +23,9 @@ public class TokenService {
             existingUser.get().setToken(tokenName);
             existingUser.get().setCoins(20);
             existingUser.get().setElo(100);
-            existingUser.get().setBio("Here comes your Bio");
-            existingUser.get().setImage("Here comes your Image");
+            existingUser.get().setName("Enter your name here");
+            existingUser.get().setBio("Enter your bio here");
+            existingUser.get().setImage("Enter your image here");
             tokenAuthenticator.setToken(tokenName);
             this.userRepo.updateUserByUuid(existingUser.get());
             return new CreateTokenDTO(tokenAuthenticator.getToken());

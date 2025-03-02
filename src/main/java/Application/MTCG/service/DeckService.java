@@ -23,9 +23,9 @@ public class DeckService {
         this.deckRepo = deckRepo;
     }
 
-    public List<Card> displayDeckCardsOfUser(String loginToken) {
+    public List<Card> getDeckCardsOfUser(String loginToken) {
         User user = userService.getUserByToken(loginToken);
-        return cardRepo.displayDeckUser(user);
+        return cardRepo.getDeckCardsByUser(user);
     }
 
     public Deck createDeck(String loginToken) {
