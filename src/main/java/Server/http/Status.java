@@ -8,6 +8,7 @@ public enum Status {
     NOT_FOUND(404, "Not Found"),
     CONFLICT(409, "Conflict"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    BAD_REQUEST(400, "Bad Request"),
     BAD_REQUEST_MONEY(400, "Bad Request Money Problem"),
     BAD_REQUEST_CARD(400, "Bad Request Card Problem");
 
