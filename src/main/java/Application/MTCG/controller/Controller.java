@@ -63,6 +63,11 @@ public abstract class Controller {
         }
     }
 
-
-
+    protected Response text(Status status, String plaintext) {
+        Response response = new Response();
+        response.setStatus(status);
+        response.setHeader("Content-Type", "application/json");
+        response.setBody(plaintext);
+        return response;
+    }
 }

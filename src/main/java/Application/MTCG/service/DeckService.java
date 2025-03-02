@@ -51,4 +51,16 @@ public class DeckService {
         }
 
     }
+
+    public String convertDeckToPlainText(List<Card> deck) {
+        StringBuilder plainTextDeck = new StringBuilder();
+
+        for (Card card : deck) {
+            plainTextDeck.append("Name: ").append(card.getCardName())
+                    .append(", Element: ").append(card.getElementType())
+                    .append(", Damage: ").append(card.getDamage())
+                    .append(System.lineSeparator());
+        }
+        return plainTextDeck.toString();
+    }
 }
