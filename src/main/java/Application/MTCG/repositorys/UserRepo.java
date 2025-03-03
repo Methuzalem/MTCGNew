@@ -1,7 +1,9 @@
 package Application.MTCG.repositorys;
 
 import Application.MTCG.data.ConnectionPool;
+import Application.MTCG.dto.ShowStatsDTO;
 import Application.MTCG.entity.User;
+import Application.MTCG.exceptions.InvalidUserData;
 
 import java.sql.ResultSet;
 import java.util.Optional;
@@ -15,7 +17,7 @@ public class UserRepo {
     private final static String FIND_USER_BY_NAME = "SELECT * FROM users WHERE username = ?";
     private final static String UPDATE_USER_BY_UUID = "UPDATE users SET username = ?, password = ?, token = ?, coins = ?, packagecount = ?, name =?, bio = ?, image = ?, elo = ?, wins = ?, losses = ? WHERE uuid = ?";
     private final static String FIND_USER_BY_TOKEN = "SELECT * FROM users WHERE token = ?";
-    private final static String FIND_ALL_USERS = "SELECT * FROM users";
+    private final static String GET_USER_STATS = "SELECT name, elo, wins, losses FROM users WHERE uuid = ?";
     private final ConnectionPool connectionPool;
 
     public UserRepo(ConnectionPool connectionPool) {
@@ -95,6 +97,30 @@ public class UserRepo {
             throw new RuntimeException(e);
         }
         return Optional.empty();
+    }
+
+    public ShowStatsDTO getStatsOfUser(User user) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_STATS)
+        ) {
+            preparedStatement.setString(1, user.getUuid());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new ShowStatsDTO(
+                        resultSet.getString("name"),
+                        String.valueOf(resultSet.getInt("elo")),
+                        String.valueOf(resultSet.getInt("wins")),
+                        String.valueOf(resultSet.getInt("losses"))
+                );
+            } else {
+                throw new InvalidUserData("User stats not found");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
 

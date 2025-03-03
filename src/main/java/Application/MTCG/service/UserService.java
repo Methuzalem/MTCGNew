@@ -76,7 +76,7 @@ public class UserService {
     }
 
     public UpdateUserDTO modelUpdateDTOFromRequest (Request request) {
-        ObjectMapper objectMapper = new ObjectMapper(); // JSON-Parser
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(request.getBody(), UpdateUserDTO.class);
         } catch (JsonProcessingException e) {
