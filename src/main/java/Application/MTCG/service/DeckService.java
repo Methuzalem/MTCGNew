@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class DeckService {
-    CardRepo cardRepo;
-    UserService userService;
-    DeckRepo deckRepo;
+    private final CardRepo cardRepo;
+    private final UserService userService;
+    private final DeckRepo deckRepo;
 
     public DeckService(CardRepo cardRepo, UserService userService, DeckRepo deckRepo) {
         this.cardRepo = cardRepo;

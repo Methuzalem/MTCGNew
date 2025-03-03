@@ -8,10 +8,10 @@ import Application.MTCG.entity.User;
 
 import java.util.Optional;
 
-public class TokenInitializeService {
+public class SessionService {
     private final UserRepo userRepo;
 
-    public TokenInitializeService(UserRepo userRepo) {
+    public SessionService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 

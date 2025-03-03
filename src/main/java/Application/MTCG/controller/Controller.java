@@ -7,6 +7,9 @@ import Application.MTCG.exceptions.MissingLoginTokenException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import Application.MTCG.dto.ScoreboardDTO;
+import Application.MTCG.dto.ShowStatsDTO;
+
 
 import Server.http.Request;
 import Server.http.Response;
@@ -70,4 +73,22 @@ public abstract class Controller {
         response.setBody(plaintext);
         return response;
     }
+
+    protected Response scoreboardText(Status status, ScoreboardDTO scoreboard) {
+        StringBuilder formattedText = new StringBuilder();
+
+        formattedText.append("Scoreboard:").append(System.lineSeparator());;
+        formattedText.append("-----------------------------").append(System.lineSeparator());;
+
+        for (ShowStatsDTO stats : scoreboard.getScoreboard()) {
+            formattedText.append("  Name: ").append(stats.getName()).append(System.lineSeparator());
+            formattedText.append("   - Elo: ").append(stats.getElo()).append(System.lineSeparator());
+            formattedText.append("   - Wins: ").append(stats.getWins()).append(System.lineSeparator());
+            formattedText.append("   - Losses: ").append(stats.getLosses()).append(System.lineSeparator());
+            formattedText.append("-----------------------------").append(System.lineSeparator());;
+        }
+
+        return text(status, formattedText.toString());
+    }
+
 }

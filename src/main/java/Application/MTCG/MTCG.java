@@ -4,10 +4,7 @@ import Application.MTCG.controller.*;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.DeckRepo;
 import Application.MTCG.repositorys.UserRepo;
-import Application.MTCG.service.CardService;
-import Application.MTCG.service.DeckService;
-import Application.MTCG.service.StatService;
-import Application.MTCG.service.UserService;
+import Application.MTCG.service.*;
 import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.exceptions.ControllerNotFound;
 import Application.MTCG.routing.Router;
@@ -59,6 +56,7 @@ public class MTCG implements Application {
         DeckRepo deckRepo = new DeckRepo(connectionPool);
         DeckService deckService = new DeckService(cardRepo, userService, deckRepo);
         StatService statService = new StatService(userService, userRepo);
+        ScoreboardService scoreboardService = new ScoreboardService(userRepo);
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
@@ -67,6 +65,7 @@ public class MTCG implements Application {
         this.router.addRoute("/cards", new CardController(cardService, userService));
         this.router.addRoute("/deck", new DeckController(deckService));
         this.router.addRoute("/stats", new StatsController(statService));
+        this.router.addRoute("/scoreboard", new ScoreboardController(scoreboardService));
 
 
 

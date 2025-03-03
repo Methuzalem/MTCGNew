@@ -15,11 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UserService {
-
     private final UserRepo userRepo;
 
     public UserService(UserRepo userRepo) {
-        this.userRepo = userRepo;
+                this.userRepo = userRepo;
     }
 
     public CreateUserDTO create (User user) {
@@ -53,6 +52,9 @@ public class UserService {
     }
 
     public void updateUserByUuid (User user) {
+        if (user == null) {
+            throw new NullPointerException("User can not be NULL");
+        }
         userRepo.updateUserByUuid(user);
     }
 
@@ -86,6 +88,9 @@ public class UserService {
     }
 
     public void updateUserNameBioImage(User user, UpdateUserDTO dto) {
+        if (user == null || dto == null) {
+            throw new NullPointerException("User/DTO can not be NULL");
+        }
         user.setName(dto.getName());
         user.setBio(dto.getBio());
         user.setImage(dto.getImage());

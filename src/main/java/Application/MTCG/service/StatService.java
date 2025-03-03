@@ -5,8 +5,8 @@ import Application.MTCG.entity.User;
 import Application.MTCG.repositorys.UserRepo;
 
 public class StatService {
-    UserService userService;
-    UserRepo userRepo;
+    private final UserService userService;
+    private final UserRepo userRepo;
 
     public StatService(UserService userService, UserRepo userRepo) {
         this.userService = userService;

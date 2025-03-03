@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class UserRepo {
@@ -18,6 +20,7 @@ public class UserRepo {
     private final static String UPDATE_USER_BY_UUID = "UPDATE users SET username = ?, password = ?, token = ?, coins = ?, packagecount = ?, name =?, bio = ?, image = ?, elo = ?, wins = ?, losses = ? WHERE uuid = ?";
     private final static String FIND_USER_BY_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final static String GET_USER_STATS = "SELECT name, elo, wins, losses FROM users WHERE uuid = ?";
+    private final static String GET_ALL_USER_STATS = "SELECT name, elo, wins, losses FROM users";
     private final ConnectionPool connectionPool;
 
     public UserRepo(ConnectionPool connectionPool) {
@@ -121,6 +124,30 @@ public class UserRepo {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ShowStatsDTO> getAllUserStats() {
+        List<ShowStatsDTO> userStatsList = new ArrayList<>();
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USER_STATS);
+                ResultSet resultSet = preparedStatement.executeQuery()
+        ) {
+            while (resultSet.next()) {
+                ShowStatsDTO stats = new ShowStatsDTO(
+                        String.valueOf(resultSet.getString("name")),
+                        String.valueOf(resultSet.getInt("elo")),
+                        String.valueOf(resultSet.getInt("wins")),
+                        String.valueOf(resultSet.getInt("losses"))
+                );
+                userStatsList.add(stats);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving user stats", e);
+        }
+        return userStatsList;
     }
 }
 
