@@ -85,10 +85,12 @@ public class BattleService {
             winMSG = "Its a draw";
         } else if (deckIdPlayer1.isEmpty()) {
             winMSG = player2.getName() + " wins the epic battle!";
+            calculateElo(player2, player1, battleLog);
         } else if (deckIdPlayer2.isEmpty()) {
             winMSG = player1.getName() + " wins the epic battle!";
+            calculateElo(player1, player2, battleLog);
         } else if (roundCounter == 101) {
-            winMSG = "We reached the limit of Rounds. The Battle is now over. We call it a draw.";
+            winMSG = "We reached the limit of Rounds. The Battle is now over. The cards you won, stay with you.";
         }
 
         battleLog.append(winMSG).append('\n');
@@ -137,5 +139,20 @@ public class BattleService {
             }
         }
         return effectiveness;
+    }
+
+    private void calculateElo(User winner, User loser, StringBuilder battleLog ){
+        winner.setElo(winner.getElo() + 3);
+        winner.setWins(winner.getWins() + 1);
+        loser.setElo(loser.getElo() - 5);
+        loser.setLosses(loser.getLosses() + 1);
+
+        userRepo.updateUserByUuid(winner);
+        userRepo.updateUserByUuid(loser);
+
+        battleLog.append(winner.getName()).append(" Elo increases for +3 points!").append('\n');
+        battleLog.append(winner.getName()).append("s Elo is now ").append(winner.getElo()).append('\n');
+        battleLog.append(loser.getName()).append(" Elo decreases for -5 points!").append('\n');
+        battleLog.append(loser.getName()).append("s Elo is now ").append(loser.getElo()).append('\n');
     }
 }
