@@ -4,7 +4,6 @@ import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
 import Application.MTCG.entity.Deck;
-import Application.MTCG.exceptions.InvalidDeckData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CardRepo {
 
@@ -24,6 +22,8 @@ public class CardRepo {
     private final static String FIND_CARDS_BY_USER_ID = "SELECT * from cards where owner_uuid = ?";
     private final static String DISPLAY_CARDS_DECK_OF_USER = "SELECT c.* FROM cards c JOIN decks d ON c.deck_id = d.id WHERE d.owner_id = ?";
     private final static String PUT_CARD_IN_PLAYER_DECK = "UPDATE cards SET deck_id = ? where id = ?";
+    private final static String UPDATE_DECK_ID_AND_OWNER = "UPDATE cards SET deck_id = ?, owner_uuid = ? where id = ?";
+
 
     private final static String ALL_CARDS = "SELECT * FROM cards";
 
@@ -123,7 +123,7 @@ public class CardRepo {
         }
     }
 
-    public void updateCardWithDeckId(Deck newDeck, List<String> deckCardIds){
+    public void updateCardWithDeckIds(Deck newDeck, List<String> deckCardIds){
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(PUT_CARD_IN_PLAYER_DECK)
@@ -131,6 +131,23 @@ public class CardRepo {
             for (int i = 0; i < 4; i++) {
                 preparedStatement.setString(1, newDeck.getDeckId());
                 preparedStatement.setString(2, deckCardIds.get(i));
+                preparedStatement.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateDeckIdAndOwner(String deckId, User user, Card card){
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DECK_ID_AND_OWNER)
+        ) {
+            for (int i = 0; i < 4; i++) {
+                preparedStatement.setString(1, deckId);
+                preparedStatement.setString(2, user.getUuid());
+                preparedStatement.setString(3, card.getCardID());
                 preparedStatement.execute();
             }
         } catch (SQLException e) {

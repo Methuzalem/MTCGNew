@@ -57,6 +57,7 @@ public class MTCG implements Application {
         DeckService deckService = new DeckService(cardRepo, userService, deckRepo);
         StatService statService = new StatService(userService, userRepo);
         ScoreboardService scoreboardService = new ScoreboardService(userRepo);
+        BattleService battleService = new BattleService(userService, userRepo, cardService, cardRepo, deckService, deckRepo);
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
@@ -66,7 +67,7 @@ public class MTCG implements Application {
         this.router.addRoute("/deck", new DeckController(deckService));
         this.router.addRoute("/stats", new StatsController(statService));
         this.router.addRoute("/scoreboard", new ScoreboardController(scoreboardService));
-
+        this.router.addRoute("/battles", new BattleController(battleService));
 
 
 /*

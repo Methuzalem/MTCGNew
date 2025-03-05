@@ -2,7 +2,6 @@ package Application.MTCG.service;
 
 import Application.MTCG.entity.Deck;
 import Application.MTCG.exceptions.InvalidDeckData;
-import Application.MTCG.exceptions.NullPointerException;
 import Application.MTCG.exceptions.UserAlreadyWithDeck;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.DeckRepo;
@@ -45,7 +44,7 @@ public class DeckService {
 
     public void configureDeckByTokenAndUserId(Deck newDeck, List<String> deckCardIds) {
         try {
-            cardRepo.updateCardWithDeckId(newDeck, deckCardIds);
+            cardRepo.updateCardWithDeckIds(newDeck, deckCardIds);
         } catch (InvalidDeckData e) {
             throw new InvalidDeckData(e.getMessage());
         }
@@ -63,4 +62,5 @@ public class DeckService {
         }
         return plainTextDeck.toString();
     }
+
 }

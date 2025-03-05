@@ -52,9 +52,7 @@ public abstract class Controller {
         if (header == null || !header.startsWith("Bearer ")) {
             throw new MissingLoginTokenException("Login Token is missing");
         }
-            String token = header.split(" ")[1];
-            String name = token.split("-")[0];
-            return token;
+        return header.split(" ")[1];
 
     }
 
@@ -87,7 +85,6 @@ public abstract class Controller {
             formattedText.append("   - Losses: ").append(stats.getLosses()).append(System.lineSeparator());
             formattedText.append("-----------------------------").append(System.lineSeparator());;
         }
-
         return text(status, formattedText.toString());
     }
 

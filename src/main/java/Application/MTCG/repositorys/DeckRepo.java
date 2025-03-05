@@ -18,6 +18,8 @@ public class DeckRepo {
 
     private final static String NEW_DECK = "INSERT INTO decks VALUES (?, ?)";
     private final static String USER_ALREADY_EXISTS = "SELECT * FROM decks WHERE owner_id = ?";
+    private final static String GET_DECK_FROM_USER = "SELECT id FROM decks WHERE owner_id = ?";
+
 
     public DeckRepo(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -45,6 +47,25 @@ public class DeckRepo {
             preparedStatement.setString(1, user.getUuid());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getDeckIdFromUser(User user) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_DECK_FROM_USER);
+        ) {
+            preparedStatement.setString(1, user.getUuid());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                return resultSet.getString(1);
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
