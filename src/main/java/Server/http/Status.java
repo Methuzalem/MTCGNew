@@ -10,7 +10,8 @@ public enum Status {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     BAD_REQUEST(400, "Bad Request"),
     BAD_REQUEST_MONEY(400, "Bad Request Money Problem"),
-    BAD_REQUEST_CARD(400, "Bad Request Card Problem");
+    BAD_REQUEST_CARD(400, "Bad Request Card Problem"),
+    REQUEST_TIMEOUT(400, "Request Timeout Problem");
 
     private final int code;
     private final String message;

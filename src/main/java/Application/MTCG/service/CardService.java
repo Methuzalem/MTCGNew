@@ -57,6 +57,7 @@ public class CardService {
                 cardRepo.updateOwner(cardsWithoutOwner.get(i));
                 packageCards.add(cardsWithoutOwner.get(i));
             }
+            //if(user.getPackageCount() % 10 == 0) if we want to track die amount of packages further
             if(user.getPackageCount() == 10){
                 user.setPackageCount(0);
             } else {

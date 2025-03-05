@@ -164,7 +164,7 @@ echo 8) show all acquired cards kienboec
 curl -i -X GET http://localhost:10001/cards --header "Authorization: Bearer kienboec-mtcgToken"
 echo "Should return HTTP 200 - and a list of all cards"
 echo should fail (no token)
-curl -i -X GET http://localhost:10001/cards 
+curl -i -X GET http://localhost:10001/cards
 echo "Should return HTTP 4xx - Unauthorized"
 echo.
 echo.
@@ -226,7 +226,7 @@ if %pauseFlag%==1 pause
 
 
 REM --------------------------------------------------
-echo 12) show configured deck 
+echo 12) show configured deck
 curl -i -X GET http://localhost:10001/deck --header "Authorization: Bearer kienboec-mtcgToken"
 echo "Should return HTTP 200 - and a list of all cards"
 echo.
@@ -327,7 +327,7 @@ ping localhost -n 10 >NUL 2>NUL
 if %pauseFlag%==1 pause
 
 REM --------------------------------------------------
-echo 18) Stats 
+echo 18) Stats
 echo kienboec
 curl -i -X GET http://localhost:10001/stats --header "Authorization: Bearer kienboec-mtcgToken"
 echo "Should return HTTP 200 - and changed user stats"

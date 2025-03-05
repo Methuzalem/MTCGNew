@@ -78,22 +78,27 @@ public class BattleService {
                 roundCounter++;
             } else {
                 battleLog.append("Its a draw").append('\n');
+                roundCounter++;
             }
         }
 
-        if (deckIdPlayer1.isEmpty() && deckIdPlayer2.isEmpty()){
+        if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()){
             winMSG = "Its a draw";
-        } else if (deckIdPlayer1.isEmpty()) {
+            battleLog.append(winMSG).append('\n');
+        } else if (tempDeckPlayer1.isEmpty()) {
             winMSG = player2.getName() + " wins the epic battle!";
+            battleLog.append(winMSG).append('\n');
             calculateElo(player2, player1, battleLog);
-        } else if (deckIdPlayer2.isEmpty()) {
+        } else if (tempDeckPlayer2.isEmpty()) {
             winMSG = player1.getName() + " wins the epic battle!";
+            battleLog.append(winMSG).append('\n');
             calculateElo(player1, player2, battleLog);
         } else if (roundCounter == 101) {
             winMSG = "We reached the limit of Rounds. The Battle is now over. The cards you won, stay with you.";
+            battleLog.append(winMSG).append('\n');
+
         }
 
-        battleLog.append(winMSG).append('\n');
 
         return battleLog.toString();
     }

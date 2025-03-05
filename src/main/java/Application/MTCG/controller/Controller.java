@@ -88,4 +88,11 @@ public abstract class Controller {
         return text(status, formattedText.toString());
     }
 
+    public String getTradingId(String path){
+        String prefix = "/tradings/";
+        if (path != null && path.startsWith(prefix)) {
+            return path.substring(prefix.length()); // Schneidet "/tradings/" ab und gibt nur die ID zurück
+        }
+        throw new IllegalArgumentException("Invalid path: " + path);
+    }
 }

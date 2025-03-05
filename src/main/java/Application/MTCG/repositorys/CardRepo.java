@@ -4,6 +4,7 @@ import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
 import Application.MTCG.entity.Deck;
+import Application.MTCG.exceptions.InvalidCardData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,11 +24,8 @@ public class CardRepo {
     private final static String DISPLAY_CARDS_DECK_OF_USER = "SELECT c.* FROM cards c JOIN decks d ON c.deck_id = d.id WHERE d.owner_id = ?";
     private final static String PUT_CARD_IN_PLAYER_DECK = "UPDATE cards SET deck_id = ? where id = ?";
     private final static String UPDATE_DECK_ID_AND_OWNER = "UPDATE cards SET deck_id = ?, owner_uuid = ? where id = ?";
-
-
-    private final static String ALL_CARDS = "SELECT * FROM cards";
-
-    private final static String CARDS_BELONGING_TO_USER = "SELECT * FROM cards WHERE owner_uuid = ?";
+    private final static String UPDATE_OWNER_BY_ID = "UPDATE cards SET owner_uuid = ? where id = ?";
+    private final static String GET_CARD_BY_ID = "SELECT * from cards WHERE id = ?";
 
 
     public CardRepo(ConnectionPool connectionPool) {
@@ -149,6 +147,40 @@ public class CardRepo {
                 preparedStatement.setString(2, user.getUuid());
                 preparedStatement.setString(3, card.getCardID());
                 preparedStatement.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateOwnerByIds(String cardId, String ownerId){
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_OWNER_BY_ID)
+        ) {
+            preparedStatement.setString(1, ownerId);
+            preparedStatement.setString(2, cardId);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Card getCardById(String cardId){
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_CARD_BY_ID)
+        ) {
+            preparedStatement.setString(1, cardId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Card card = new Card(resultSet.getString("id"), resultSet.getString("name"), resultSet.getString("elementType"), resultSet.getFloat("damage"), resultSet.getString("owner_uuid"), resultSet.getString("deck_Id"));
+                return card;
+            } else {
+                throw new InvalidCardData("Cant resolve card ID");
             }
         } catch (SQLException e) {
             e.printStackTrace();

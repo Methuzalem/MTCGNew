@@ -11,9 +11,7 @@ import java.util.concurrent.*;
 public class BattleController extends Controller {
     private final BattleService battleService;
     private static final BlockingQueue<String> battleQueue = new LinkedBlockingQueue<>();
-    private static final ExecutorService battleExecutor = Executors.newCachedThreadPool();
     private static final Object battleLock = new Object();
-    private static final ConcurrentHashMap<String, String> battleResults = new ConcurrentHashMap<>();
     private  String battleLog;
 
     public BattleController(BattleService battleService) {
@@ -33,38 +31,25 @@ public class BattleController extends Controller {
 
         synchronized (battleLock) {
             try {
-                // Prüfe, ob bereits ein Spieler in der Warteschlange ist
                 String opponentToken = battleQueue.peek();
 
                 if (opponentToken != null && !opponentToken.equals(loginToken)) {
-                    // Zweiter Spieler gefunden, entferne den Gegner aus der Warteschlange
                     battleQueue.poll();
 
-                    // Starte das Battle asynchron
-                    Future<String> battleResult = battleExecutor.submit(() -> {
-                        return battleService.startBattle(loginToken, opponentToken);
-                    });
-
-                    // Warte auf das Ergebnis des Battles
-                    battleLog = battleResult.get(10, TimeUnit.SECONDS);
-
-                    // Wecke alle wartenden Spieler auf
-                    battleLock.notifyAll();
+                    battleLog = battleService.startBattle(loginToken, opponentToken);
 
                     return text(Status.OK, battleLog);
                 }
 
-                // Falls kein Gegner da ist, Spieler in die Warteschlange legen
                 if (!battleQueue.contains(loginToken)) {
-                    battleQueue.offer(loginToken);
+                    battleQueue.add(loginToken);
                 }
 
-                // Warten auf einen Gegner (nicht sofort aus der Queue entfernen)
-                battleLock.wait(10000); // Warte maximal 10 Sekunden auf einen Gegner
+                battleLock.wait(5000);
 
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return json(Status.INTERNAL_SERVER_ERROR, "An error occurred while processing your request.");
+                return json(Status.INTERNAL_SERVER_ERROR, "An error occurred while processing the request.");
             }
             return text(Status.OK, battleLog);
         }

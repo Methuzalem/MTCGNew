@@ -3,6 +3,7 @@ package Application.MTCG;
 import Application.MTCG.controller.*;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.DeckRepo;
+import Application.MTCG.repositorys.TradingRepo;
 import Application.MTCG.repositorys.UserRepo;
 import Application.MTCG.service.*;
 import Application.MTCG.data.ConnectionPool;
@@ -58,6 +59,8 @@ public class MTCG implements Application {
         StatService statService = new StatService(userService, userRepo);
         ScoreboardService scoreboardService = new ScoreboardService(userRepo);
         BattleService battleService = new BattleService(userService, userRepo, cardService, cardRepo, deckService, deckRepo);
+        TradingRepo tradingRepo = new TradingRepo(connectionPool);
+        TradingService tradingService = new TradingService(tradingRepo, userService, cardRepo);
 
         this.router.addRoute("/users", new UserController(userService));
         this.router.addRoute("/sessions", new SessionController(userRepo));
@@ -68,7 +71,7 @@ public class MTCG implements Application {
         this.router.addRoute("/stats", new StatsController(statService));
         this.router.addRoute("/scoreboard", new ScoreboardController(scoreboardService));
         this.router.addRoute("/battles", new BattleController(battleService));
-
+        this.router.addRoute("/tradings", new TradingController(tradingService));
 
 /*
         StudentRepository studentRepository = new StudentDbRepository(connectionPool);

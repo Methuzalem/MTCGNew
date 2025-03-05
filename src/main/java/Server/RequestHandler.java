@@ -9,7 +9,7 @@ import Server.util.HttpRequestParser;
 import Server.util.HttpResponseFormatter;
 import Server.util.HttpSocket;
 
-public class RequestHandler {
+public class RequestHandler implements Runnable {
 
     private final Socket socket;
     private final Application application;
@@ -20,6 +20,11 @@ public class RequestHandler {
     ) {
         this.socket = socket;
         this.application = application;
+    }
+
+    @Override
+    public void run() {
+        this.handle();
     }
 
     public void handle() {
