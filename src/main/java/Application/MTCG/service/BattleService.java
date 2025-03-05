@@ -65,13 +65,13 @@ public class BattleService {
             battleLog.append(cardPlayer2.getCardName()).append(" deals ").append(damagePlayer2).append(" damage!").append('\n');
 
             if(damagePlayer1 > damagePlayer2){
-                battleLog.append("Player 1 wins the ").append(roundCounter).append(" Round").append('\n');
+                battleLog.append("Player 1 wins the ").append(roundCounter).append(" Round").append('\n').append("\n");
                 tempDeckPlayer1.add(cardPlayer2);
                 tempDeckPlayer2.remove(cardPlayer2);
                 cardRepo.updateDeckIdAndOwner(deckIdPlayer1, player1, cardPlayer2);
                 roundCounter++;
             } else if (damagePlayer2 > damagePlayer1){
-                battleLog.append("Player 2 wins the ").append(roundCounter).append(" Round").append('\n');
+                battleLog.append("Player 2 wins the ").append(roundCounter).append(" Round").append('\n').append("\n");
                 tempDeckPlayer2.add(cardPlayer1);
                 tempDeckPlayer1.remove(cardPlayer1);
                 cardRepo.updateDeckIdAndOwner(deckIdPlayer2, player2, cardPlayer1);
@@ -86,7 +86,7 @@ public class BattleService {
             winMSG = "Its a draw";
             battleLog.append(winMSG).append('\n');
         } else if (tempDeckPlayer1.isEmpty()) {
-            winMSG = player2.getName() + " wins the epic battle!";
+            winMSG = " " + player2.getName() + " wins the epic battle! \n";
             battleLog.append(winMSG).append('\n');
             calculateElo(player2, player1, battleLog);
         } else if (tempDeckPlayer2.isEmpty()) {

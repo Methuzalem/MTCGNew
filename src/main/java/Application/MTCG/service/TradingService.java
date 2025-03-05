@@ -3,11 +3,9 @@ package Application.MTCG.service;
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
 import Application.MTCG.exceptions.InvalidTradingDeal;
-import Application.MTCG.exceptions.InvalidUserData;
 import Application.MTCG.repositorys.TradingRepo;
 import Application.MTCG.entity.Trade;
 import Application.MTCG.repositorys.CardRepo;
-import Application.MTCG.service.UserService;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class TradingService {
         for (Trade trade : tradingDeals) {
             stringBuilder.append("ID: ").append(trade.getId()).append("\n")
                     .append("Card to Trade: ").append(trade.getCardToTrade()).append("\n")
-                    .append("Type: ").append(trade.getType()).append("\n")
+                    .append("Wanted type: ").append(trade.getType()).append("\n")
                     .append("Minimum Damage: ").append(trade.getMinimumDamage()).append("\n")
                     .append("Trade Status: ").append(trade.getTradeStatus()).append("\n")
                     .append("Owner ID: ").append(trade.getOwnerId()).append("\n")
@@ -42,7 +40,7 @@ public class TradingService {
         return stringBuilder.toString();
     }
 
-    public String createTradingDeal(String loginToken, Trade trade){
+    public String createTradingDeal(String loginToken, Trade trade) {
         try {
             User user = userService.getUserByToken(loginToken);
             tradingRepo.createTradingDeal(user, trade);
@@ -52,11 +50,11 @@ public class TradingService {
         }
     }
 
-    public String deleteTradingById(String loginToken, String tradingId){
+    public String deleteTradingById(String loginToken, String tradingId) {
         User user = userService.getUserByToken(loginToken);
         Trade trade = tradingRepo.getTradeById(tradingId);
 
-        if(user.getUuid().equals(trade.getOwnerId())){
+        if (user.getUuid().equals(trade.getOwnerId())) {
             tradingRepo.deleteTradeById(tradingId);
             return "Trading Deal deleted!";
         } else {
@@ -64,25 +62,41 @@ public class TradingService {
         }
     }
 
-    public String tradeCard(String loginToken, String tradingId, String cardIdToTrade){
+    public String tradeCard(String loginToken, String tradingId, String cardIdToTrade) {
         User user = userService.getUserByToken(loginToken);
         Trade trade = tradingRepo.getTradeById(tradingId);
 
-        if(user.getUuid().equals(trade.getOwnerId())){
+        if (user.getUuid().equals(trade.getOwnerId())) {
             throw new InvalidTradingDeal("User cant trade with himself.");
         } else {
             String uuidTradeHolder = trade.getOwnerId();
             String uuidTradeExecuter = user.getUuid();
             String cardIdForTradeExecuter = trade.getCardToTrade();
-            Card tradeCard = cardRepo.getCardById(cardIdToTrade);
-            if(trade.getMinimumDamage() < tradeCard.getDamage()) {
+            Card tradeCardHolder = cardRepo.getCardById(cardIdToTrade);
+            String cardTypeToTrade = convertNameToMonsterOrSpell(tradeCardHolder.getCardName());
+
+            if (trade.getMinimumDamage() < tradeCardHolder.getDamage() && trade.getType().equals(cardTypeToTrade)) {
                 cardRepo.updateOwnerByIds(cardIdToTrade, uuidTradeHolder);
                 cardRepo.updateOwnerByIds(cardIdForTradeExecuter, uuidTradeExecuter);
                 tradingRepo.deleteTradeById(tradingId);
                 return "Cards were successfully traded!";
             } else {
-                throw new InvalidTradingDeal("Minimum Damage of new Card was lower than necessary");
+                throw new InvalidTradingDeal("Trading requirments are not fullfilled!");
             }
+        }
+    }
+
+    public String convertNameToMonsterOrSpell(String name) {
+        if (name.contains("Goblin") ||
+                name.contains("Dragon") ||
+                name.contains("Knight") ||
+                name.contains("Kraken") ||
+                name.contains("Elf") ||
+                name.contains("Ork") ||
+                name.contains("Wizzard")) {
+            return "monster";
+        } else {
+            return "spell";
         }
     }
 }
