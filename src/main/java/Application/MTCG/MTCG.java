@@ -58,7 +58,7 @@ public class MTCG implements Application {
         DeckService deckService = new DeckService(cardRepo, userService, deckRepo);
         StatService statService = new StatService(userService, userRepo);
         ScoreboardService scoreboardService = new ScoreboardService(userRepo);
-        BattleService battleService = new BattleService(userService, userRepo, cardService, cardRepo, deckService, deckRepo);
+        BattleService battleService = new BattleService(userService, userRepo, cardRepo, deckService, deckRepo);
         TradingRepo tradingRepo = new TradingRepo(connectionPool);
         TradingService tradingService = new TradingService(tradingRepo, userService, cardRepo);
 

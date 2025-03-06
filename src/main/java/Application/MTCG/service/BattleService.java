@@ -12,17 +12,15 @@ import java.util.Random;
 public class BattleService {
     private final UserService userService;
     private final UserRepo userRepo;
-    private final CardService cardService;
     private final CardRepo cardRepo;
     private final StringBuilder battleLog = new StringBuilder();
     private final DeckService deckService;
     private final DeckRepo deckRepo;
 
 
-    public BattleService(UserService userService, UserRepo userRepo, CardService cardService, CardRepo cardRepo, DeckService deckService, DeckRepo deckRepo) {
+    public BattleService(UserService userService, UserRepo userRepo, CardRepo cardRepo, DeckService deckService, DeckRepo deckRepo) {
         this.userService = userService;
         this.userRepo = userRepo;
-        this.cardService = cardService;
         this.cardRepo = cardRepo;
         this.deckService = deckService;
         this.deckRepo = deckRepo;
@@ -35,11 +33,11 @@ public class BattleService {
         String deckIdPlayer2 = deckRepo.getDeckIdFromUser(player2);
         List<Card> tempDeckPlayer1 = deckService.getDeckCardsOfUser(loginTokenPlayer1);
         List<Card> tempDeckPlayer2 = deckService.getDeckCardsOfUser(loginTokenPlayer2);
-        double damagePlayer1 = 0;
-        double damagePlayer2 = 0;
+        double damagePlayer1;
+        double damagePlayer2;
         Random rand = new Random();
         int roundCounter = 1;
-        String winMSG = "";
+        String winMSG;
 
         battleLog.append("Welcome to the epic battle between ").append(player1.getName()).append(" and ").append(player2.getName()).append(System.lineSeparator());
         battleLog.append("Good luck to both of you").append('\n');
@@ -77,7 +75,7 @@ public class BattleService {
                 cardRepo.updateDeckIdAndOwner(deckIdPlayer2, player2, cardPlayer1);
                 roundCounter++;
             } else {
-                battleLog.append("Its a draw").append('\n');
+                battleLog.append("Its a draw. The cards got the same power!").append('\n');
                 roundCounter++;
             }
         }
@@ -103,7 +101,7 @@ public class BattleService {
         return battleLog.toString();
     }
 
-    private double calculateDamage (Card card1, Card card2, StringBuilder battleLog){
+     double calculateDamage (Card card1, Card card2, StringBuilder battleLog){
         double damage = 0;
         double damageEffectiveness = calculateEffectiveness(card1, card2);
 
@@ -129,7 +127,7 @@ public class BattleService {
         return damage*damageEffectiveness;
     }
 
-    private double calculateEffectiveness(Card card1, Card card2){
+     double calculateEffectiveness(Card card1, Card card2){
         double effectiveness = 1.00;
 
         if(card1.getCardName().contains("Spell")){
@@ -146,7 +144,7 @@ public class BattleService {
         return effectiveness;
     }
 
-    private void calculateElo(User winner, User loser, StringBuilder battleLog ){
+     void calculateElo(User winner, User loser, StringBuilder battleLog ){
         winner.setElo(winner.getElo() + 3);
         winner.setWins(winner.getWins() + 1);
         loser.setElo(loser.getElo() - 5);

@@ -19,7 +19,7 @@ public class CardService {
         this.userService = userService;
     }
 
-    public List<Card> createPackage(String loginToken, List<Card> cards) {
+    public List<Card> loadCardsInShop(String loginToken, List<Card> cards) {
         if(loginToken.equals("admin-mtcgToken")){
             List<Card> newCards = new ArrayList<>();
             for (Card card : cards) {
@@ -35,7 +35,7 @@ public class CardService {
         if (card == null) {
             throw new NullPointerException("Card object can't be null");
         } else if (card.getCardName() == null) {
-            throw new NullPointerException("Card name can't,od be null");
+            throw new NullPointerException("Card name can't be null");
         }
         card = cardRepo.save(card);
         return card;
@@ -57,7 +57,7 @@ public class CardService {
                 cardRepo.updateOwner(cardsWithoutOwner.get(i));
                 packageCards.add(cardsWithoutOwner.get(i));
             }
-            //if(user.getPackageCount() % 10 == 0) if we want to track die amount of packages further
+            //if(user.getPackageCount() % 10 == 0) if we want to track the amount of packages further
             if(user.getPackageCount() == 10){
                 user.setPackageCount(0);
             } else {
