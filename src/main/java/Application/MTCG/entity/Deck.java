@@ -4,7 +4,8 @@ public class Deck {
     private String deckId;
     private String userId;
 
-    public Deck() {}
+    public Deck() {
+    }
 
     public Deck(String deckId, String userId) {
         this.deckId = deckId;

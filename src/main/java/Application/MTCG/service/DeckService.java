@@ -28,7 +28,6 @@ public class DeckService {
         if (user == null) {
             throw new NullPointerException("User cant be null");
         }
-
         return cardRepo.getDeckCardsByUser(user);
     }
 
@@ -37,7 +36,7 @@ public class DeckService {
         User user = userService.getUserByToken(loginToken);
         boolean userGotAlreadyADeck = deckRepo.userAlreadyWithDeck(user);
 
-        if(userGotAlreadyADeck) {
+        if (userGotAlreadyADeck) {
             throw new UserAlreadyWithDeck("User got already a deck");
         } else {
             deck.setDeckId(UUID.randomUUID().toString());

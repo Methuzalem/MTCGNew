@@ -11,9 +11,9 @@ public class Trade {
     private String ownerId;
 
     public Trade(@JsonProperty("Id") String id,
-                       @JsonProperty("CardToTrade") String cardToTrade,
-                       @JsonProperty("Type") String type,
-                       @JsonProperty("MinimumDamage") float minimumDamage) {
+                 @JsonProperty("CardToTrade") String cardToTrade,
+                 @JsonProperty("Type") String type,
+                 @JsonProperty("MinimumDamage") float minimumDamage) {
         this.id = id;
         this.type = type;
         this.cardToTrade = cardToTrade;

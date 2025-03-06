@@ -12,7 +12,7 @@ public class BattleController extends Controller {
     private final BattleService battleService;
     private static final BlockingQueue<String> battleQueue = new LinkedBlockingQueue<>();
     private static final Object battleLock = new Object();
-    private  String battleLog;
+    private String battleLog;
 
     public BattleController(BattleService battleService) {
         this.battleService = battleService;

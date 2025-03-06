@@ -23,16 +23,16 @@ public class UserRepo {
     private final static String GET_ALL_USER_STATS = "SELECT name, elo, wins, losses FROM users";
     private final ConnectionPool connectionPool;
 
+
     public UserRepo(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
     public User save(User user) {
-        try(
+        try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(NEW_USER);
-        )
-        {
+        ) {
             preparedStatement.setString(1, user.getUuid());
             preparedStatement.setString(2, user.getUsername());
             preparedStatement.setString(3, user.getPassword());
@@ -61,7 +61,7 @@ public class UserRepo {
         return Optional.empty();
     }
 
-    public void updateUserByUuid(User user){
+    public void updateUserByUuid(User user) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_UUID)

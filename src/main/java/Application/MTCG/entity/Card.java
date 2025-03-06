@@ -27,9 +27,12 @@ public class Card {
             throw new InvalidCardName("Invalid card name: " + name);
         }
         switch (cardName) {
-            case FireGoblin, FireDragon, FireWizzard, FireOrk, FireKnight, FireKraken, FireElf, FireSpell -> this.elementType = "Fire";
-            case WaterGoblin, WaterDragon, WaterWizzard, WaterOrk, WaterKnight, WaterKraken, WaterElf, WaterSpell -> this.elementType = "Water";
-            case RegularGoblin, RegularDragon, RegularWizzard, RegularOrk, RegularKnight, RegularKraken, RegularElf, RegularSpell -> this.elementType = "Regular";
+            case FireGoblin, FireDragon, FireWizzard, FireOrk, FireKnight, FireKraken, FireElf, FireSpell ->
+                    this.elementType = "Fire";
+            case WaterGoblin, WaterDragon, WaterWizzard, WaterOrk, WaterKnight, WaterKraken, WaterElf, WaterSpell ->
+                    this.elementType = "Water";
+            case RegularGoblin, RegularDragon, RegularWizzard, RegularOrk, RegularKnight, RegularKraken, RegularElf,
+                 RegularSpell -> this.elementType = "Regular";
             default -> this.elementType = "Unknown";
         }
         this.damage = damage;
@@ -77,7 +80,11 @@ public class Card {
         this.ownerID = ownerID;
     }
 
-    public String getDeckId() { return deckId; }
+    public String getDeckId() {
+        return deckId;
+    }
 
-    public void setDeckId(String deckId) { this.deckId = deckId; }
+    public void setDeckId(String deckId) {
+        this.deckId = deckId;
+    }
 }

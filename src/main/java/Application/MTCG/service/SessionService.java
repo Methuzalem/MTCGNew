@@ -19,7 +19,7 @@ public class SessionService {
         Optional<User> existingUser = this.userRepo.findUserByName(tokenAuthenticator.getUsername());
 
         if (existingUser.isPresent() && existingUser.get().getPassword().equals(tokenAuthenticator.getPassword())) {
-            String tokenName ="%s-mtcgToken".formatted(tokenAuthenticator.getUsername());
+            String tokenName = "%s-mtcgToken".formatted(tokenAuthenticator.getUsername());
             existingUser.get().setToken(tokenName);
             existingUser.get().setCoins(20);
             existingUser.get().setElo(100);

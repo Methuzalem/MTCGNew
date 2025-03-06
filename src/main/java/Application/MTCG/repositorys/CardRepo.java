@@ -20,7 +20,6 @@ public class CardRepo {
     private final static String NEW_CARD = "INSERT INTO cards VALUES (?, ?, ?, ?, ?, ?)";
     private final static String FIND_FREE_CARDS = "SELECT * FROM cards WHERE owner_uuid is NULL";
     private final static String SET_OWNER_BY_CARD = "UPDATE cards SET owner_uuid = ? where id = ?";
-    private final static String FIND_CARDS_BY_USER_ID = "SELECT * from cards where owner_uuid = ?";
     private final static String DISPLAY_CARDS_DECK_OF_USER = "SELECT c.* FROM cards c JOIN decks d ON c.deck_id = d.id WHERE d.owner_id = ?";
     private final static String PUT_CARD_IN_PLAYER_DECK = "UPDATE cards SET deck_id = ? where id = ?";
     private final static String UPDATE_DECK_ID_AND_OWNER = "UPDATE cards SET deck_id = ?, owner_uuid = ? where id = ?";
@@ -51,7 +50,7 @@ public class CardRepo {
         }
     }
 
-    public List<Card> findFreeCards(User user){
+    public List<Card> findFreeCards(User user) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(FIND_FREE_CARDS)
@@ -69,7 +68,7 @@ public class CardRepo {
         }
     }
 
-    public void updateOwner(Card card){
+    public void updateOwner(Card card) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SET_OWNER_BY_CARD)
@@ -83,7 +82,7 @@ public class CardRepo {
         }
     }
 
-    public List<Card> getDeckCardsByUser(User user){
+    public List<Card> getDeckCardsByUser(User user) {
         List<Card> cards = new ArrayList<>();
         try (
                 Connection connection = connectionPool.getConnection();
@@ -102,7 +101,7 @@ public class CardRepo {
         }
     }
 
-    public void updateCardWithDeckIds(Deck newDeck, List<String> deckCardIds){
+    public void updateCardWithDeckIds(Deck newDeck, List<String> deckCardIds) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(PUT_CARD_IN_PLAYER_DECK)
@@ -118,7 +117,7 @@ public class CardRepo {
         }
     }
 
-    public void updateDeckIdAndOwner(String deckId, User user, Card card){
+    public void updateDeckIdAndOwner(String deckId, User user, Card card) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DECK_ID_AND_OWNER)
@@ -136,7 +135,7 @@ public class CardRepo {
         }
     }
 
-    public void updateOwnerByIds(String cardId, String ownerId){
+    public void updateOwnerByIds(String cardId, String ownerId) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_OWNER_BY_ID)
@@ -150,7 +149,7 @@ public class CardRepo {
         }
     }
 
-    public Card getCardById(String cardId){
+    public Card getCardById(String cardId) {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_CARD_BY_ID)

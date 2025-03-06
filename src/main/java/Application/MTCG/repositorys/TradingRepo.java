@@ -4,6 +4,7 @@ import Application.MTCG.data.ConnectionPool;
 import Application.MTCG.entity.Card;
 import Application.MTCG.entity.User;
 import Application.MTCG.entity.Trade;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -22,10 +23,9 @@ public class TradingRepo {
     private final static String CLOSE_TRADE_BY_ID = "UPDATE trades SET trade_status = ? WHERE id = ?";
 
 
-
-
-    public TradingRepo(ConnectionPool connectionPool) {this.connectionPool = connectionPool;}
-
+    public TradingRepo(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
 
     public List<Trade> getTradingDeals() {
         List<Trade> trades = new ArrayList<>();
@@ -58,13 +58,13 @@ public class TradingRepo {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TRADING_DEAL)
         ) {
-                preparedStatement.setString(1, trade.getId());
-                preparedStatement.setString(2, trade.getCardToTrade());
-                preparedStatement.setString(3, trade.getType());
-                preparedStatement.setFloat(4, trade.getMinimumDamage());
-                preparedStatement.setString(5, trade.getTradeStatus());
-                preparedStatement.setString(6, user.getUuid());
-                preparedStatement.execute();
+            preparedStatement.setString(1, trade.getId());
+            preparedStatement.setString(2, trade.getCardToTrade());
+            preparedStatement.setString(3, trade.getType());
+            preparedStatement.setFloat(4, trade.getMinimumDamage());
+            preparedStatement.setString(5, trade.getTradeStatus());
+            preparedStatement.setString(6, user.getUuid());
+            preparedStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,16 +82,16 @@ public class TradingRepo {
             preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (resultSet.next()) {
-                    trade = new Trade(
-                            resultSet.getString("id"),
-                            resultSet.getString("card_to_trade"),
-                            resultSet.getString("type"),
-                            resultSet.getFloat("minimum_damage"),
-                            resultSet.getString("trade_status"),
-                            resultSet.getString("owner_id")
-                    );
-                }
+            if (resultSet.next()) {
+                trade = new Trade(
+                        resultSet.getString("id"),
+                        resultSet.getString("card_to_trade"),
+                        resultSet.getString("type"),
+                        resultSet.getFloat("minimum_damage"),
+                        resultSet.getString("trade_status"),
+                        resultSet.getString("owner_id")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

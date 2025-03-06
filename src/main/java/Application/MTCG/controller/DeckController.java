@@ -13,6 +13,7 @@ import Server.http.Response;
 import Server.http.Method;
 import Server.http.Status;
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.List;
 
 public class DeckController extends Controller {
@@ -24,7 +25,7 @@ public class DeckController extends Controller {
 
     @Override
     public Response handle(Request request) {
-        if(request.getMethod() == Method.GET && request.getPath().contains("plain")) {
+        if (request.getMethod() == Method.GET && request.getPath().contains("plain")) {
             return displayPlainDeck(request);
         } else if (request.getMethod().equals(Method.GET)) {
             return displayDeck(request);
@@ -49,7 +50,8 @@ public class DeckController extends Controller {
     private Response configureDeck(Request request) {
         try {
             String loginToken = getLoginToken(request);
-            List<String> cardIds = arrayFromBody(request.getBody(), new TypeReference<List<String>>() {});
+            List<String> cardIds = arrayFromBody(request.getBody(), new TypeReference<List<String>>() {
+            });
             if (cardIds.size() != 4) {
                 throw new InvalidDeckData("Deck size must be 4");
             }

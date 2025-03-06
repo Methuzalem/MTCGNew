@@ -42,10 +42,10 @@ public class BattleService {
         battleLog.append("Welcome to the epic battle between ").append(player1.getName()).append(" and ").append(player2.getName()).append(System.lineSeparator());
         battleLog.append("Good luck to both of you").append('\n');
 
-        while(true){
-            if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()){
+        while (true) {
+            if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()) {
                 break;
-            } else if(tempDeckPlayer1.isEmpty() || tempDeckPlayer2.isEmpty() || roundCounter == 101){
+            } else if (tempDeckPlayer1.isEmpty() || tempDeckPlayer2.isEmpty() || roundCounter == 101) {
                 break;
             }
 
@@ -62,13 +62,13 @@ public class BattleService {
             battleLog.append(cardPlayer1.getCardName()).append(" deals ").append(damagePlayer1).append(" damage!").append('\n');
             battleLog.append(cardPlayer2.getCardName()).append(" deals ").append(damagePlayer2).append(" damage!").append('\n');
 
-            if(damagePlayer1 > damagePlayer2){
+            if (damagePlayer1 > damagePlayer2) {
                 battleLog.append("Player 1 wins the ").append(roundCounter).append(" Round").append('\n').append("\n");
                 tempDeckPlayer1.add(cardPlayer2);
                 tempDeckPlayer2.remove(cardPlayer2);
                 cardRepo.updateDeckIdAndOwner(deckIdPlayer1, player1, cardPlayer2);
                 roundCounter++;
-            } else if (damagePlayer2 > damagePlayer1){
+            } else if (damagePlayer2 > damagePlayer1) {
                 battleLog.append("Player 2 wins the ").append(roundCounter).append(" Round").append('\n').append("\n");
                 tempDeckPlayer2.add(cardPlayer1);
                 tempDeckPlayer1.remove(cardPlayer1);
@@ -79,10 +79,10 @@ public class BattleService {
                 roundCounter++;
             }
 
-            if(roundCounter == 50){
+            if (roundCounter == 50) {
                 int random = new Random().nextInt(2);
 
-                if(random == 1){
+                if (random == 1) {
                     tempDeckPlayer1 = enhanceMonsters(tempDeckPlayer1);
                     tempDeckPlayer2 = enhanceSpells(tempDeckPlayer2);
                 } else {
@@ -92,7 +92,7 @@ public class BattleService {
             }
         }
 
-        if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()){
+        if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()) {
             winMSG = "Its a draw";
             battleLog.append(winMSG).append('\n');
         } else if (tempDeckPlayer1.isEmpty()) {
@@ -106,57 +106,54 @@ public class BattleService {
         } else if (roundCounter == 101) {
             winMSG = "We reached the limit of Rounds. The Battle is now over. The cards you won, stay with you.";
             battleLog.append(winMSG).append('\n');
-
         }
-
-
         return battleLog.toString();
     }
 
-     double calculateDamage (Card card1, Card card2, StringBuilder battleLog){
+    double calculateDamage(Card card1, Card card2, StringBuilder battleLog) {
         double damage = 0;
         double damageEffectiveness = calculateEffectiveness(card1, card2);
 
-        if(card1.getCardName().contains("Goblin") && card2.getCardName().contains("Dragon")){
+        if (card1.getCardName().contains("Goblin") && card2.getCardName().contains("Dragon")) {
             battleLog.append("Goblins are too afraid of Dragons to attack.").append('\n');
             return damage;
-        } else if (card1.getCardName().contains("Ork") && card2.getCardName().contains("Wizzard")){
+        } else if (card1.getCardName().contains("Ork") && card2.getCardName().contains("Wizzard")) {
             battleLog.append("Wizzard can control Orks so they are not able to damage them.").append('\n');
             return damage;
-        } else if(card1.getCardName().contains("Knight") && card2.getCardName().equals("WaterSpell")) {
+        } else if (card1.getCardName().contains("Knight") && card2.getCardName().equals("WaterSpell")) {
             battleLog.append("The armor of Knights is so heavy that WaterSpells make them drown them instantly before dealing damage.").append('\n');
             return damage;
-        } else if (card1.getCardName().contains("Spell") && card2.getCardName().contains("Kraken")){
+        } else if (card1.getCardName().contains("Spell") && card2.getCardName().contains("Kraken")) {
             battleLog.append("The Kraken is immune against spells.").append('\n');
             return damage;
-        } else if (card1.getCardName().contains("Dragon") && card2.getCardName().equals("FireElf")){
+        } else if (card1.getCardName().contains("Dragon") && card2.getCardName().equals("FireElf")) {
             battleLog.append("The FireElves know Dragons since they were little and can evade their attacks.").append('\n');
             return damage;
         }
 
         damage = card1.getDamage();
 
-        return damage*damageEffectiveness;
+        return damage * damageEffectiveness;
     }
 
-     double calculateEffectiveness(Card card1, Card card2){
+    double calculateEffectiveness(Card card1, Card card2) {
         double effectiveness = 1.00;
 
-        if(card1.getCardName().contains("Spell")){
-            if(card1.getElementType().equals("Fire") && card2.getElementType().equals("Regular")){
+        if (card1.getCardName().contains("Spell")) {
+            if (card1.getElementType().equals("Fire") && card2.getElementType().equals("Regular")) {
                 effectiveness = 2.00;
-            } else if (card1.getElementType().equals("Water") && card2.getElementType().equals("Fire")){
+            } else if (card1.getElementType().equals("Water") && card2.getElementType().equals("Fire")) {
                 effectiveness = 2.00;
-            } else if (card1.getElementType().equals("Regular") && card2.getElementType().equals("Water")){
+            } else if (card1.getElementType().equals("Regular") && card2.getElementType().equals("Water")) {
                 effectiveness = 2.00;
-            } else if (card1.getElementType().equals("Fire") && card2.getElementType().equals("Water")){
+            } else if (card1.getElementType().equals("Fire") && card2.getElementType().equals("Water")) {
                 effectiveness = 0.50;
             }
         }
         return effectiveness;
     }
 
-     void calculateElo(User winner, User loser, StringBuilder battleLog ){
+    void calculateElo(User winner, User loser, StringBuilder battleLog) {
         winner.setElo(winner.getElo() + 3);
         winner.setWins(winner.getWins() + 1);
         loser.setElo(loser.getElo() - 5);
@@ -171,15 +168,15 @@ public class BattleService {
         battleLog.append(loser.getName()).append("s Elo is now ").append(loser.getElo()).append('\n');
     }
 
-    List<Card> enhanceMonsters (List<Card> tempDeck){
-        for(int i = 0; i < tempDeck.size(); i++){
-            if( tempDeck.get(i).getCardName().contains("Goblin") ||
-                tempDeck.get(i).getCardName().contains("Dragon") ||
-                tempDeck.get(i).getCardName().contains("Ork") ||
-                tempDeck.get(i).getCardName().contains("Kraken") ||
-                tempDeck.get(i).getCardName().contains("Elf") ||
-                tempDeck.get(i).getCardName().contains("Wizzard") ||
-                tempDeck.get(i).getCardName().contains("Knight")){
+    List<Card> enhanceMonsters(List<Card> tempDeck) {
+        for (int i = 0; i < tempDeck.size(); i++) {
+            if (tempDeck.get(i).getCardName().contains("Goblin") ||
+                    tempDeck.get(i).getCardName().contains("Dragon") ||
+                    tempDeck.get(i).getCardName().contains("Ork") ||
+                    tempDeck.get(i).getCardName().contains("Kraken") ||
+                    tempDeck.get(i).getCardName().contains("Elf") ||
+                    tempDeck.get(i).getCardName().contains("Wizzard") ||
+                    tempDeck.get(i).getCardName().contains("Knight")) {
 
                 tempDeck.get(i).setDamage(tempDeck.get(i).getDamage() + 25);
             }
@@ -187,9 +184,9 @@ public class BattleService {
         return tempDeck;
     }
 
-    List<Card> enhanceSpells (List<Card> tempDeck){
-        for(int i = 0; i < tempDeck.size(); i++){
-            if( tempDeck.get(i).getCardName().contains("Spell")){
+    List<Card> enhanceSpells(List<Card> tempDeck) {
+        for (int i = 0; i < tempDeck.size(); i++) {
+            if (tempDeck.get(i).getCardName().contains("Spell")) {
                 tempDeck.get(i).setDamage(tempDeck.get(i).getDamage() + 10);
             }
         }

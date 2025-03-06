@@ -15,7 +15,8 @@ public class User {
     private int losses = 0;
 
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -69,9 +70,13 @@ public class User {
         this.token = token;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getBio() {
         return bio;
@@ -121,7 +126,11 @@ public class User {
         this.image = image;
     }
 
-    public int getPackageCount() {return packageCount;}
+    public int getPackageCount() {
+        return packageCount;
+    }
 
-    public void setPackageCount(int packageCount) {this.packageCount = packageCount;}
+    public void setPackageCount(int packageCount) {
+        this.packageCount = packageCount;
+    }
 }

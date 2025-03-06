@@ -11,6 +11,7 @@ import Server.http.Request;
 
 import java.util.Optional;
 import java.util.UUID;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,10 +19,10 @@ public class UserService {
     private final UserRepo userRepo;
 
     public UserService(UserRepo userRepo) {
-                this.userRepo = userRepo;
+        this.userRepo = userRepo;
     }
 
-    public CreateUserDTO create (User user) {
+    public CreateUserDTO create(User user) {
         if (user == null) {
             throw new NullPointerException("User can not be NULL");
         }
@@ -38,7 +39,7 @@ public class UserService {
         return new CreateUserDTO(newUser.getUsername());
     }
 
-    public User getUserByToken (String token) {
+    public User getUserByToken(String token) {
         if (token == null) {
             throw new NullPointerException("Token can not be NULL");
         }
@@ -51,14 +52,14 @@ public class UserService {
         }
     }
 
-    public void updateUserByUuid (User user) {
+    public void updateUserByUuid(User user) {
         if (user == null) {
             throw new NullPointerException("User can not be NULL");
         }
         userRepo.updateUserByUuid(user);
     }
 
-    public boolean matchTokenWithPath (String loginToken, String path) {
+    public boolean matchTokenWithPath(String loginToken, String path) {
         if (loginToken == null || path == null) {
             throw new NullPointerException("Login token can not be NULL");
         }
@@ -70,14 +71,14 @@ public class UserService {
         return false;
     }
 
-    public UpdateUserDTO modelUpdateDTO (User user) {
+    public UpdateUserDTO modelUpdateDTO(User user) {
         if (user == null) {
             throw new NullPointerException("User can not be NULL");
         }
         return new UpdateUserDTO(user.getName(), user.getBio(), user.getImage());
     }
 
-    public UpdateUserDTO modelUpdateDTOFromRequest (Request request) {
+    public UpdateUserDTO modelUpdateDTOFromRequest(Request request) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(request.getBody(), UpdateUserDTO.class);

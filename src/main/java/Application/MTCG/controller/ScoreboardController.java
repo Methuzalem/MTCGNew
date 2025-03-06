@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public class ScoreboardController extends Controller{
+public class ScoreboardController extends Controller {
     ScoreboardService scoreboardService;
 
     public ScoreboardController(ScoreboardService service) {
@@ -27,7 +27,7 @@ public class ScoreboardController extends Controller{
 
     @Override
     public Response handle(Request request) {
-        if(request.getMethod() == Method.GET) {
+        if (request.getMethod() == Method.GET) {
             return create(request);
         }
         return json(Status.NOT_FOUND, "Couldn't handle HTTP request");

@@ -16,7 +16,7 @@ import Server.http.Status;
 
 import java.util.List;
 
-public class CardController extends Controller{
+public class CardController extends Controller {
     private final CardService cardService;
     private final UserService userService;
 

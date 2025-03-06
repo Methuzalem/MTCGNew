@@ -13,7 +13,8 @@ public class UpdateUserDTO {
     @JsonProperty("Image")
     private String image;
 
-    public UpdateUserDTO() {}
+    public UpdateUserDTO() {
+    }
 
     public UpdateUserDTO(String name, String bio, String image) {
         this.name = name;

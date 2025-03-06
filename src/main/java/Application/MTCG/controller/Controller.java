@@ -26,7 +26,6 @@ public abstract class Controller {
 
     public abstract Response handle(Request request);
 
-
     protected <T> T fromBody(String body, Class<T> type) {
         try {
             return objectMapper.readValue(body, type);
@@ -53,7 +52,6 @@ public abstract class Controller {
             throw new MissingLoginTokenException("Login Token is missing");
         }
         return header.split(" ")[1];
-
     }
 
     protected <T> T arrayFromBody(String body, TypeReference<T> typeReference) {
@@ -75,20 +73,23 @@ public abstract class Controller {
     protected Response scoreboardText(Status status, ScoreboardDTO scoreboard) {
         StringBuilder formattedText = new StringBuilder();
 
-        formattedText.append("Scoreboard:").append(System.lineSeparator());;
-        formattedText.append("-----------------------------").append(System.lineSeparator());;
+        formattedText.append("Scoreboard:").append(System.lineSeparator());
+        ;
+        formattedText.append("-----------------------------").append(System.lineSeparator());
+        ;
 
         for (ShowStatsDTO stats : scoreboard.getScoreboard()) {
             formattedText.append("  Name: ").append(stats.getName()).append(System.lineSeparator());
             formattedText.append("   - Elo: ").append(stats.getElo()).append(System.lineSeparator());
             formattedText.append("   - Wins: ").append(stats.getWins()).append(System.lineSeparator());
             formattedText.append("   - Losses: ").append(stats.getLosses()).append(System.lineSeparator());
-            formattedText.append("-----------------------------").append(System.lineSeparator());;
+            formattedText.append("-----------------------------").append(System.lineSeparator());
+            ;
         }
         return text(status, formattedText.toString());
     }
 
-    public String getTradingId(String path){
+    public String getTradingId(String path) {
         String prefix = "/tradings/";
         if (path != null && path.startsWith(prefix)) {
             return path.substring(prefix.length()); // Schneidet "/tradings/" ab und gibt nur die ID zurück

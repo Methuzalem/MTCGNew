@@ -20,7 +20,7 @@ public class CardService {
     }
 
     public List<Card> loadCardsInShop(String loginToken, List<Card> cards) {
-        if(loginToken.equals("admin-mtcgToken")){
+        if (loginToken.equals("admin-mtcgToken")) {
             List<Card> newCards = new ArrayList<>();
             for (Card card : cards) {
                 Card newCard = createCard(card);
@@ -41,46 +41,46 @@ public class CardService {
         return card;
     }
 
-    public List<Card> checkCoinsAquirePackage(String loginToken){
+    public List<Card> checkCoinsAquirePackage(String loginToken) {
         User user = userService.getUserByToken(loginToken);
         final int packageCosts = 5;
         final int amountOfCardsInPackage = 5;
 
-        if(user.getCoins() >= packageCosts){
+        if (user.getCoins() >= packageCosts) {
             List<Card> packageCards = new ArrayList<>();
             List<Card> cardsWithoutOwner = cardRepo.findFreeCards(user);
-            if(cardsWithoutOwner == null || cardsWithoutOwner.size() < amountOfCardsInPackage){
+            if (cardsWithoutOwner == null || cardsWithoutOwner.size() < amountOfCardsInPackage) {
                 throw new NotEnoughCards("Not enough Cards for package available");
             }
-            for(int i = 0; i < amountOfCardsInPackage; i++){
+            for (int i = 0; i < amountOfCardsInPackage; i++) {
                 cardsWithoutOwner.get(i).setOwnerID(user.getUuid());
                 cardRepo.updateOwner(cardsWithoutOwner.get(i));
                 packageCards.add(cardsWithoutOwner.get(i));
             }
             //if(user.getPackageCount() % 10 == 0) if we want to track the amount of packages further
-            if(user.getPackageCount() == 10){
+            if (user.getPackageCount() == 10) {
                 user.setPackageCount(0);
             } else {
-                user.setCoins(user.getCoins()-5);
-                user.setPackageCount(user.getPackageCount()+1);
+                user.setCoins(user.getCoins() - 5);
+                user.setPackageCount(user.getPackageCount() + 1);
             }
             userService.updateUserByUuid(user);
             return packageCards;
 
         } else {
-            throw(new NotEnoughCoins("Not enough coins left"));
+            throw (new NotEnoughCoins("Not enough coins left"));
         }
     }
 
     public List<Card> readCardsOfUser(User user) {
         try {
             List<Card> cards = cardRepo.getDeckCardsByUser(user);
-            if(cards == null || cards.isEmpty()){
+            if (cards == null || cards.isEmpty()) {
                 throw new NoCardsFound("No cards found for this user");
             }
             return cards;
         } catch (NoCardsFound e) {
-            throw(new NoCardsFound("No cards found for this user"));
+            throw (new NoCardsFound("No cards found for this user"));
         }
     }
 }

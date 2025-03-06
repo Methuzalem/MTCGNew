@@ -13,7 +13,8 @@ public class ShowStatsDTO {
         this.losses = losses;
     }
 
-    public ShowStatsDTO() {}
+    public ShowStatsDTO() {
+    }
 
     public String getName() {
         return name;

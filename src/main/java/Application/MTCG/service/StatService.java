@@ -13,7 +13,7 @@ public class StatService {
         this.userRepo = userRepo;
     }
 
-    public ShowStatsDTO getStatsOfUser(String loginToken){
+    public ShowStatsDTO getStatsOfUser(String loginToken) {
         User user = userService.getUserByToken(loginToken);
         ShowStatsDTO userStats = userRepo.getStatsOfUser(user);
         return userStats;

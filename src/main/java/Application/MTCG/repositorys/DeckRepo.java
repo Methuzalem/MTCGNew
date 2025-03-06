@@ -61,7 +61,7 @@ public class DeckRepo {
             preparedStatement.setString(1, user.getUuid());
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 return resultSet.getString(1);
             } else {
                 return null;

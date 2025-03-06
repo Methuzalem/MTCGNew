@@ -26,17 +26,17 @@ public class UserController extends Controller {
     public Response handle(Request request) {
         if (request.getMethod().equals(Method.POST)) {
             return create(request);
-        } else if(request.getMethod().equals(Method.GET)) {
+        } else if (request.getMethod().equals(Method.GET)) {
             return displayUserData(request);
-        } else if(request.getMethod().equals(Method.PUT)) {
+        } else if (request.getMethod().equals(Method.PUT)) {
             return updateUserData(request);
-        }else {
+        } else {
             return json(Status.NOT_FOUND, "Couldn't handle HTTP request.");
         }
     }
 
     private Response create(Request request) {
-        try{
+        try {
             User user = fromBody(request.getBody(), User.class);
             CreateUserDTO userDTO = userService.create(user);
             return json(Status.CREATED, userDTO);
@@ -48,10 +48,10 @@ public class UserController extends Controller {
     }
 
     private Response displayUserData(Request request) {
-        try{
+        try {
             String loginToken = getLoginToken(request);
             String pathName = request.getPath();
-            if(userService.matchTokenWithPath(loginToken, pathName)){
+            if (userService.matchTokenWithPath(loginToken, pathName)) {
                 User user = userService.getUserByToken(loginToken);
                 UpdateUserDTO update = userService.modelUpdateDTO(user);
                 return json(Status.OK, update);
@@ -68,10 +68,10 @@ public class UserController extends Controller {
     }
 
     public Response updateUserData(Request request) {
-        try{
+        try {
             String loginToken = getLoginToken(request);
             String pathName = request.getPath();
-            if(userService.matchTokenWithPath(loginToken, pathName)){
+            if (userService.matchTokenWithPath(loginToken, pathName)) {
                 User user = userService.getUserByToken(loginToken);
                 UpdateUserDTO update = userService.modelUpdateDTOFromRequest(request);
                 userService.updateUserNameBioImage(user, update);

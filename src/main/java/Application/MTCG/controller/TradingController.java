@@ -11,7 +11,7 @@ import Server.http.Request;
 import Server.http.Response;
 import Server.http.Status;
 
-public class TradingController extends Controller{
+public class TradingController extends Controller {
     TradingService tradingService;
 
     public TradingController(TradingService tradingService) {
@@ -20,7 +20,7 @@ public class TradingController extends Controller{
 
     @Override
     public Response handle(Request request) {
-        if(request.getMethod() == Method.GET) {
+        if (request.getMethod() == Method.GET) {
             return displayTrades(request);
         } else if (request.getMethod() == Method.POST) {
             return createTradingDeal(request);
@@ -37,22 +37,21 @@ public class TradingController extends Controller{
 
     public Response createTradingDeal(Request request) {
         try {
-            if(request.getPath().equals("/tradings")) {
-                String loginToken = getLoginToken(request);
+            String loginToken = getLoginToken(request);
+            if (request.getPath().equals("/tradings")) {
                 Trade tradingDeal = fromBody(request.getBody(), Trade.class);
                 String tradeCreated = tradingService.createTradingDeal(loginToken, tradingDeal);
                 return json(Status.OK, tradeCreated);
-            }else {
-                String loginToken = getLoginToken(request);
+            } else {
                 String path = request.getPath();
                 String tradingId = getTradingId(path);
                 String cardIdToTrade = fromBody(request.getBody(), String.class);
                 String tradeDone = tradingService.tradeCard(loginToken, tradingId, cardIdToTrade);
                 return json(Status.OK, tradeDone);
             }
-        } catch (InvalidUserData e){
+        } catch (InvalidUserData e) {
             return json(Status.NOT_FOUND, new HttpErrorResponse(e.getMessage()));
-        } catch (InvalidTradingDeal e){
+        } catch (InvalidTradingDeal e) {
             return json(Status.CONFLICT, new HttpErrorResponse(e.getMessage()));
         }
     }
@@ -66,7 +65,7 @@ public class TradingController extends Controller{
             String deletedTrading = tradingService.deleteTradingById(loginToken, tradingID);
 
             return json(Status.OK, deletedTrading);
-        } catch (InvalidUserData e){
+        } catch (InvalidUserData e) {
             return json(Status.NOT_FOUND, new HttpErrorResponse(e.getMessage()));
         } catch (InvalidTradingDeal e) {
             return json(Status.CONFLICT, new HttpErrorResponse(e.getMessage()));

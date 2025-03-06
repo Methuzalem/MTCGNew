@@ -21,7 +21,7 @@ public class StatsController extends Controller {
 
     @Override
     public Response handle(Request request) {
-        if(request.getMethod() == Method.GET) {
+        if (request.getMethod() == Method.GET) {
             return displayStats(request);
         }
         return json(Status.NOT_FOUND, "Couldn't handle HTTP request");
