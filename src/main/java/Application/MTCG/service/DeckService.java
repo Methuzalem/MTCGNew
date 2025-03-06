@@ -24,6 +24,11 @@ public class DeckService {
 
     public List<Card> getDeckCardsOfUser(String loginToken) {
         User user = userService.getUserByToken(loginToken);
+
+        if (user == null) {
+            throw new NullPointerException("User cant be null");
+        }
+
         return cardRepo.getDeckCardsByUser(user);
     }
 
@@ -48,7 +53,6 @@ public class DeckService {
         } catch (InvalidDeckData e) {
             throw new InvalidDeckData(e.getMessage());
         }
-
     }
 
     public String convertDeckToPlainText(List<Card> deck) {
@@ -62,5 +66,4 @@ public class DeckService {
         }
         return plainTextDeck.toString();
     }
-
 }

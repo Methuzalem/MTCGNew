@@ -142,6 +142,7 @@ public class CardRepo {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DECK_ID_AND_OWNER)
         ) {
+            //if decksize should always stay 4 then deckId should be NULL and just the owner should change
             for (int i = 0; i < 4; i++) {
                 preparedStatement.setString(1, deckId);
                 preparedStatement.setString(2, user.getUuid());

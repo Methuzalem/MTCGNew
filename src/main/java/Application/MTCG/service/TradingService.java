@@ -23,7 +23,7 @@ public class TradingService {
     public String showTradingDeals() {
         List<Trade> tradingDeals = tradingRepo.getTradingDeals();
         if (tradingDeals == null || tradingDeals.isEmpty()) {
-            return "{}";
+            return "[]";
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(tradingDeals.size()).append(" trading deals:\n");
@@ -78,7 +78,7 @@ public class TradingService {
             if (trade.getMinimumDamage() < tradeCardHolder.getDamage() && trade.getType().equals(cardTypeToTrade)) {
                 cardRepo.updateOwnerByIds(cardIdToTrade, uuidTradeHolder);
                 cardRepo.updateOwnerByIds(cardIdForTradeExecuter, uuidTradeExecuter);
-                tradingRepo.deleteTradeById(tradingId);
+                tradingRepo.closeTradeById(tradingId);
                 return "Cards were successfully traded!";
             } else {
                 throw new InvalidTradingDeal("Trading requirments are not fullfilled!");

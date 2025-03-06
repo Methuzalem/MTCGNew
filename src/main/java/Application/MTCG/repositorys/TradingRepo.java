@@ -19,6 +19,8 @@ public class TradingRepo {
     private final static String CREATE_TRADING_DEAL = "INSERT INTO trades VALUES (?, ?, ?, ?, ?, ?)";
     private final static String TRADE_BY_ID = "SELECT * from trades WHERE id = ?";
     private final static String DELETE_TRADE_BY_ID = "DELETE from trades WHERE id = ?";
+    private final static String CLOSE_TRADE_BY_ID = "UPDATE trades SET trade_status = ? WHERE id = ?";
+
 
 
 
@@ -103,6 +105,21 @@ public class TradingRepo {
                 PreparedStatement preparedStatement = connection.prepareStatement(DELETE_TRADE_BY_ID)
         ) {
             preparedStatement.setString(1, id);
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void closeTradeById(String id) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(CLOSE_TRADE_BY_ID)
+        ) {
+            preparedStatement.setString(1, "closed");
+            preparedStatement.setString(2, id);
             preparedStatement.execute();
 
         } catch (SQLException e) {
