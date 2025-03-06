@@ -78,6 +78,18 @@ public class BattleService {
                 battleLog.append("Its a draw. The cards got the same power!").append('\n');
                 roundCounter++;
             }
+
+            if(roundCounter == 50){
+                int random = new Random().nextInt(2);
+
+                if(random == 1){
+                    tempDeckPlayer1 = enhanceMonsters(tempDeckPlayer1);
+                    tempDeckPlayer2 = enhanceSpells(tempDeckPlayer2);
+                } else {
+                    tempDeckPlayer1 = enhanceSpells(tempDeckPlayer1);
+                    tempDeckPlayer2 = enhanceMonsters(tempDeckPlayer2);
+                }
+            }
         }
 
         if (tempDeckPlayer1.isEmpty() && tempDeckPlayer2.isEmpty()){
@@ -157,5 +169,30 @@ public class BattleService {
         battleLog.append(winner.getName()).append("s Elo is now ").append(winner.getElo()).append('\n');
         battleLog.append(loser.getName()).append(" Elo decreases for -5 points!").append('\n');
         battleLog.append(loser.getName()).append("s Elo is now ").append(loser.getElo()).append('\n');
+    }
+
+    List<Card> enhanceMonsters (List<Card> tempDeck){
+        for(int i = 0; i < tempDeck.size(); i++){
+            if( tempDeck.get(i).getCardName().contains("Goblin") ||
+                tempDeck.get(i).getCardName().contains("Dragon") ||
+                tempDeck.get(i).getCardName().contains("Ork") ||
+                tempDeck.get(i).getCardName().contains("Kraken") ||
+                tempDeck.get(i).getCardName().contains("Elf") ||
+                tempDeck.get(i).getCardName().contains("Wizzard") ||
+                tempDeck.get(i).getCardName().contains("Knight")){
+
+                tempDeck.get(i).setDamage(tempDeck.get(i).getDamage() + 25);
+            }
+        }
+        return tempDeck;
+    }
+
+    List<Card> enhanceSpells (List<Card> tempDeck){
+        for(int i = 0; i < tempDeck.size(); i++){
+            if( tempDeck.get(i).getCardName().contains("Spell")){
+                tempDeck.get(i).setDamage(tempDeck.get(i).getDamage() + 10);
+            }
+        }
+        return tempDeck;
     }
 }

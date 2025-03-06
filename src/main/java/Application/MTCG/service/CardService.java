@@ -74,7 +74,7 @@ public class CardService {
 
     public List<Card> readCardsOfUser(User user) {
         try {
-            List<Card> cards = cardRepo.findCardsbyUserId(user);
+            List<Card> cards = cardRepo.getDeckCardsByUser(user);
             if(cards == null || cards.isEmpty()){
                 throw new NoCardsFound("No cards found for this user");
             }

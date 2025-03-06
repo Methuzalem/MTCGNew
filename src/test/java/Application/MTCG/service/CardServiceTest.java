@@ -99,7 +99,7 @@ class CardServiceTest {
     @Test
     void readCardsOfUserWithExistingCardsShouldReturnCards() {
         List<Card> userCards = List.of(card1, card2);
-        when(cardRepo.findCardsbyUserId(user)).thenReturn(userCards);
+        when(cardRepo.getDeckCardsByUser(user)).thenReturn(userCards);
 
         List<Card> retrievedCards = cardService.readCardsOfUser(user);
 
@@ -109,7 +109,7 @@ class CardServiceTest {
 
     @Test
     void readCardsOfUserWithNoCardsShouldThrowException() {
-        when(cardRepo.findCardsbyUserId(user)).thenReturn(new ArrayList<>());
+        when(cardRepo.getDeckCardsByUser(user)).thenReturn(new ArrayList<>());
 
         Exception exception = assertThrows(NoCardsFound.class, () ->
                 cardService.readCardsOfUser(user)

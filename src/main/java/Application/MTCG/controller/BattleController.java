@@ -31,8 +31,10 @@ public class BattleController extends Controller {
 
         synchronized (battleLock) {
             try {
+                //looking for player in queue and save him as opponentToken
                 String opponentToken = battleQueue.peek();
 
+                //If oppenent exists, and opponent and user are not the same put opponent out of queue and start battle, return battleLog
                 if (opponentToken != null && !opponentToken.equals(loginToken)) {
                     battleQueue.poll();
 
@@ -41,10 +43,12 @@ public class BattleController extends Controller {
                     return text(Status.OK, battleLog);
                 }
 
+                //If opponent does not exist and player is not in queue
                 if (!battleQueue.contains(loginToken)) {
                     battleQueue.add(loginToken);
                 }
 
+                //wait for opponent at least for 5 sec
                 battleLock.wait(5000);
 
             } catch (InterruptedException e) {

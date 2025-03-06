@@ -1,6 +1,7 @@
 package Application.MTCG.service;
 
 import Application.MTCG.entity.Card;
+import Application.MTCG.entity.Deck;
 import Application.MTCG.entity.User;
 import Application.MTCG.repositorys.CardRepo;
 import Application.MTCG.repositorys.DeckRepo;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -32,14 +34,12 @@ class DeckServiceTest {
     private Card card1;
     private Card card2;
     private User user;
-    private User user2;
 
     @BeforeEach
     void setUp() {
         card1 = new Card("ID1", "FireGoblin", "Fire", 20, "player1", "player1");
         card2 = new Card("ID2", "Dragon", "Unknown", 50, "player2", "player2");
         user = new User("UUID123", "TestUser", "password", "token123", 10, 0, "name", "bio", "image", 100, 1, 0);
-        user2 = new User("UUID345", "TestUser2", "password2", "token345", 0, 0, "name2", "bio2", "image2", 95, 0, 1);
     }
 
     @Test
@@ -63,6 +63,24 @@ class DeckServiceTest {
         assertEquals("User cant be null", e.getMessage());
     }
 
+    @Test
+    void configureDeckByTokenAndUserIdShouldUpdateCardDeckIds() {
+        Deck deck = new Deck();
+        deck.setDeckId(UUID.randomUUID().toString());
+        List<String> deckCardIds = Arrays.asList("Card1", "Card2", "Card3");
 
+        assertDoesNotThrow(() -> deckservice.configureDeckByTokenAndUserId(deck, deckCardIds));
+    }
 
+    @Test
+    void convertDeckToPlainText_ShouldReturnFormattedString() {
+        List<Card> deck = Arrays.asList(card1, card2);
+        String expectedOutput = "Name: FireGoblin, Element: Fire, Damage: 20.0" + System.lineSeparator() +
+                                "Name: Dragon, Element: Unknown, Damage: 50.0" + System.lineSeparator();
+
+        String result = deckservice.convertDeckToPlainText(deck);
+
+        assertNotNull(result);
+        assertEquals(expectedOutput, result);
+    }
 }

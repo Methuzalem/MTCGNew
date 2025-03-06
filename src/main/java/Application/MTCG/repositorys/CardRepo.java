@@ -83,25 +83,6 @@ public class CardRepo {
         }
     }
 
-    public List<Card> findCardsbyUserId(User user){
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_CARDS_BY_USER_ID)
-        ) {
-            List<Card> cards = new ArrayList<>();
-            preparedStatement.setString(1, user.getUuid());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Card card = new Card(resultSet.getString("id"), resultSet.getString("name"), resultSet.getString("elementType"), resultSet.getFloat("damage"), resultSet.getString("owner_uuid"), resultSet.getString("deck_Id"));
-                cards.add(card);
-            }
-            return cards;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<Card> getDeckCardsByUser(User user){
         List<Card> cards = new ArrayList<>();
         try (
